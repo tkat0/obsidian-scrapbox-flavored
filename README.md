@@ -8,8 +8,8 @@
 
 ## Features
 
-- [x] Show cards with a image or a description
-- [ ] Sort cards
+-   [x] Show cards with a image or a description
+-   [ ] Sort cards
 
 ## How to use
 
@@ -20,7 +20,3 @@ If you want to try, follow the following steps.
 -   Copy over `main.js`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/obsidian-grid-view/`
 -   Enable this plugin in the Obsidian configuration.
 -   Execute command `Grid view: Open grid view` or open it from the sidebar icon
-
-## API Documentation
-
-See https://github.com/obsidianmd/obsidian-api
