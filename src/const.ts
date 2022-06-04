@@ -1,2 +1,2 @@
-export const PLUGIN_IDENTIFIER = "grid-view";
-export const PLUGIN_NAME = "Grid view";
+export const PLUGIN_IDENTIFIER = "scrapbox-flavors";
+export const PLUGIN_NAME = "Scrapbox flavors";
