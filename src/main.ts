@@ -24,7 +24,7 @@ export default class GridViewPlugin extends Plugin {
             callback: () => {
                 this.activeView();
             },
-            hotkeys: [{ modifiers: ["Meta"], key: "s" }],
+            hotkeys: [{ modifiers: ["Meta", "Shift"], key: "s" }],
         });
 
         // NOTE(tkat0): obsidian may update default values in the next version.
