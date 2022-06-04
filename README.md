@@ -6,9 +6,13 @@
 
 ## Features
 
-### Grid view
+### Scrapbox view
 
-Show cards with a image or a description (default: <kbd>Command</kbd> + <kbd>Shift</kbd> + <kbd>s</kbd>)
+Show cards with a image or a description
+
+Command:
+
+-   **Open scrapbox view** (default: <kbd>Command</kbd> + <kbd>Shift</kbd> + <kbd>s</kbd>)
 
 <img src="./docs/scrapbox-view.png" width="600px" />
 
