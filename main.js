@@ -24690,7 +24690,7 @@ var GridViewPlugin = class extends import_obsidian3.Plugin {
         callback: () => {
           this.activeView();
         },
-        hotkeys: [{ modifiers: ["Meta"], key: "s" }]
+        hotkeys: [{ modifiers: ["Meta", "Shift"], key: "s" }]
       });
       (_b = (_a = this.app.vault.config).tabSize) != null ? _b : _a.tabSize = 4;
       (_d = (_c = this.app.vault.config).useTab) != null ? _d : _c.useTab = true;
