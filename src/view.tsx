@@ -3,7 +3,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 
 import { App } from "./components/App";
-import { PLUGIN_IDENTIFIER, PLUGIN_NAME } from "./const";
+import { PLUGIN_IDENTIFIER } from "./const";
 import { AppContext } from "./context";
 
 export class GridView extends ItemView {
@@ -16,7 +16,7 @@ export class GridView extends ItemView {
     }
 
     getDisplayText(): string {
-        return PLUGIN_NAME;
+        return "Scrapbox view";
     }
 
     async onOpen(): Promise<void> {

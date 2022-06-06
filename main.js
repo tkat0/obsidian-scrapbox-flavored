@@ -24471,7 +24471,6 @@ var App = () => {
 
 // src/const.ts
 var PLUGIN_IDENTIFIER = "scrapbox-flavors";
-var PLUGIN_NAME = "Scrapbox flavors";
 
 // src/view.tsx
 var GridView2 = class extends import_obsidian2.ItemView {
@@ -24482,7 +24481,7 @@ var GridView2 = class extends import_obsidian2.ItemView {
     return PLUGIN_IDENTIFIER;
   }
   getDisplayText() {
-    return PLUGIN_NAME;
+    return "Scrapbox view";
   }
   onOpen() {
     return __async(this, null, function* () {
