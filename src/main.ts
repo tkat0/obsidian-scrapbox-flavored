@@ -1,4 +1,6 @@
 import { Plugin } from "obsidian";
+import { keymap } from "@codemirror/view";
+import { Prec } from "@codemirror/state";
 
 import { GridView } from "./view";
 import { PLUGIN_IDENTIFIER } from "./const";
@@ -7,6 +9,8 @@ import {
     indentSelecttedBlock,
     moveCursorToBegin,
     moveCursorToEnd,
+    indentList,
+    outdentList,
 } from "./features/listop";
 
 export default class GridViewPlugin extends Plugin {
@@ -35,6 +39,42 @@ export default class GridViewPlugin extends Plugin {
 
         // if `useTab`, '\t'
         const indent = useTab ? "\t" : " ".repeat(tabSize);
+
+        // register code mirror extensions triggerd by simple hotkeys
+        this.registerEditorExtension(
+            Prec.highest(
+                keymap.of([
+                    {
+                        key: "Tab",
+                        run: (target) => {
+                            return indentList(target, indent);
+                        },
+                    },
+                    {
+                        key: "Space",
+                        run: (target) => {
+                            return indentList(target, indent, "next-to-prefix");
+                        },
+                    },
+                    {
+                        key: "s-Tab",
+                        run: (target) => {
+                            return outdentList(target, indent);
+                        },
+                    },
+                    {
+                        key: "Backspace",
+                        run: (target) => {
+                            return outdentList(
+                                target,
+                                indent,
+                                "next-to-prefix"
+                            );
+                        },
+                    },
+                ])
+            )
+        );
 
         // TODO(tkat0): allow user to set default hot key by settings. Refer other plugins
 

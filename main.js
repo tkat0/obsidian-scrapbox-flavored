@@ -23058,6 +23058,8 @@ __export(exports, {
   default: () => GridViewPlugin
 });
 var import_obsidian3 = __toModule(require("obsidian"));
+var import_view = __toModule(require("@codemirror/view"));
+var import_state = __toModule(require("@codemirror/state"));
 
 // src/view.tsx
 var import_obsidian2 = __toModule(require("obsidian"));
@@ -24603,7 +24605,6 @@ var indentSelecttedBlock = (editor, direction, indent) => {
   editor.transaction({
     changes
   });
-  console.log(newAnchor, newHead);
   editor.setSelection(newAnchor, newHead);
 };
 var moveListBlock = (editor, to) => {
@@ -24674,6 +24675,88 @@ var moveCursorToEnd = (editor) => {
   const text = editor.getLine(line);
   editor.setCursor(line, text.length);
 };
+var indentList = (target, indent, cursor = void 0) => {
+  const selection = target.state.selection;
+  if (selection.ranges.length !== 1)
+    return false;
+  const range = selection.ranges[0];
+  const line = target.state.doc.lineAt(range.anchor);
+  const { level, prefix } = getListInfo(line.text);
+  const isCursorNextToPrefix = level === void 0 ? line.from === range.from : line.from + prefix.length === range.from;
+  if (cursor === "next-to-prefix" && !isCursorNextToPrefix) {
+    return false;
+  }
+  if (level === void 0) {
+    const prefix2 = "- ";
+    target.dispatch({
+      changes: [
+        {
+          from: line.from,
+          to: line.to,
+          insert: `${prefix2}${line.text}`
+        }
+      ],
+      selection: {
+        anchor: range.anchor + prefix2.length
+      }
+    });
+  } else {
+    target.dispatch({
+      changes: [
+        {
+          from: line.from,
+          to: line.to,
+          insert: `${indent}${line.text}`
+        }
+      ],
+      selection: {
+        anchor: range.anchor + indent.length
+      }
+    });
+  }
+  return true;
+};
+var outdentList = (target, indent, cursor = void 0) => {
+  const selection = target.state.selection;
+  if (selection.ranges.length !== 1)
+    return false;
+  const range = selection.ranges[0];
+  const line = target.state.doc.lineAt(range.anchor);
+  const { level, prefix } = getListInfo(line.text);
+  if (level === void 0)
+    return false;
+  const isCursorNextToPrefix = line.from + prefix.length === range.from;
+  if (cursor === "next-to-prefix" && !isCursorNextToPrefix)
+    return false;
+  if (level === 0) {
+    target.dispatch({
+      changes: [
+        {
+          from: line.from,
+          to: line.to,
+          insert: line.text.substring(prefix.length)
+        }
+      ],
+      selection: {
+        anchor: range.anchor - prefix.length
+      }
+    });
+  } else {
+    target.dispatch({
+      changes: [
+        {
+          from: line.from,
+          to: line.to,
+          insert: line.text.substring(indent.length)
+        }
+      ],
+      selection: {
+        anchor: range.anchor - indent.length
+      }
+    });
+  }
+  return true;
+};
 
 // src/main.ts
 var GridViewPlugin = class extends import_obsidian3.Plugin {
@@ -24696,6 +24779,32 @@ var GridViewPlugin = class extends import_obsidian3.Plugin {
       (_d = (_c = this.app.vault.config).useTab) != null ? _d : _c.useTab = true;
       const { useTab, tabSize } = this.app.vault.config;
       const indent = useTab ? "	" : " ".repeat(tabSize);
+      this.registerEditorExtension(import_state.Prec.highest(import_view.keymap.of([
+        {
+          key: "Tab",
+          run: (target) => {
+            return indentList(target, indent);
+          }
+        },
+        {
+          key: "Space",
+          run: (target) => {
+            return indentList(target, indent, "next-to-prefix");
+          }
+        },
+        {
+          key: "s-Tab",
+          run: (target) => {
+            return outdentList(target, indent);
+          }
+        },
+        {
+          key: "Backspace",
+          run: (target) => {
+            return outdentList(target, indent, "next-to-prefix");
+          }
+        }
+      ])));
       this.addCommand({
         id: "move-cursor-beginning-of-line",
         name: "Move cursor to the beginning of the line",

@@ -27,6 +27,17 @@ Command:
 </thead>
 <tr>
 
+<tr>
+<td>
+<li><b>Create a list</b> (<kbd>Tab</kbd> or <kbd>Space</kbd>)</li>
+<li><b>Delete a list</b> (<kbd>Shift</kbd> + <kbd>Tab</kbd> or <kbd>Backspace</kbd>)</li>
+*) These are not commands. The hotkey can not be changed now.
+</td>
+<td>
+<img src="./docs/create-delete.gif" width="400px" />
+</td>
+</tr>
+
 <td>
 <ul>
 <li><b>Move cursor to the beginning of the line</b> (default: <kbd>Ctrl</kbd> + <kbd>a</kbd>)</li>

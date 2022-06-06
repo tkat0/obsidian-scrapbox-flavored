@@ -1,4 +1,5 @@
 import { Editor, EditorChange, EditorPosition } from "obsidian";
+import { EditorView } from "@codemirror/view";
 
 /**
  * matches line as follows.
@@ -145,8 +146,6 @@ export const indentSelecttedBlock = (
         changes,
     });
 
-    // editor.setCursor(anchor.line, offset);
-    console.log(newAnchor, newHead);
     editor.setSelection(newAnchor, newHead);
 };
 
@@ -232,4 +231,115 @@ export const moveCursorToEnd = (editor: Editor) => {
     const { line } = editor.getCursor();
     const text = editor.getLine(line);
     editor.setCursor(line, text.length);
+};
+
+export const indentList = (
+    target: EditorView,
+    indent: string,
+    cursor: "next-to-prefix" | undefined = undefined
+): boolean => {
+    const selection = target.state.selection;
+
+    if (selection.ranges.length !== 1) return false;
+
+    const range = selection.ranges[0];
+    const line = target.state.doc.lineAt(range.anchor);
+
+    const { level, prefix } = getListInfo(line.text);
+
+    // 1) "hoge"
+    //     ^ cursor is here
+    // 2) "   - hoge"
+    //          ^ cursor is here
+    const isCursorNextToPrefix =
+        level === undefined
+            ? line.from === range.from
+            : line.from + prefix.length === range.from;
+
+    if (cursor === "next-to-prefix" && !isCursorNextToPrefix) {
+        return false;
+    }
+
+    if (level === undefined) {
+        const prefix = "- ";
+        target.dispatch({
+            changes: [
+                {
+                    from: line.from,
+                    to: line.to,
+                    insert: `${prefix}${line.text}`,
+                },
+            ],
+            selection: {
+                anchor: range.anchor + prefix.length,
+            },
+        });
+    } else {
+        target.dispatch({
+            changes: [
+                {
+                    from: line.from,
+                    to: line.to,
+                    insert: `${indent}${line.text}`,
+                },
+            ],
+            selection: {
+                anchor: range.anchor + indent.length,
+            },
+        });
+    }
+    return true;
+};
+
+export const outdentList = (
+    target: EditorView,
+    indent: string,
+    cursor: "next-to-prefix" | undefined = undefined
+): boolean => {
+    const selection = target.state.selection;
+
+    if (selection.ranges.length !== 1) return false;
+
+    const range = selection.ranges[0];
+    const line = target.state.doc.lineAt(range.anchor);
+
+    const { level, prefix } = getListInfo(line.text);
+
+    if (level === undefined) return false;
+
+    // "   - hoge"
+    //       ^ cursor is here
+    const isCursorNextToPrefix = line.from + prefix.length === range.from;
+
+    if (cursor === "next-to-prefix" && !isCursorNextToPrefix) return false;
+
+    if (level === 0) {
+        target.dispatch({
+            changes: [
+                {
+                    from: line.from,
+                    to: line.to,
+                    insert: line.text.substring(prefix.length),
+                },
+            ],
+            selection: {
+                anchor: range.anchor - prefix.length,
+            },
+        });
+    } else {
+        target.dispatch({
+            changes: [
+                {
+                    from: line.from,
+                    to: line.to,
+                    insert: line.text.substring(indent.length),
+                },
+            ],
+            selection: {
+                anchor: range.anchor - indent.length,
+            },
+        });
+    }
+
+    return true;
 };
