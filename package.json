@@ -22,7 +22,7 @@
         "esbuild": "0.13.12",
         "obsidian": "latest",
         "tslib": "2.3.1",
-        "typescript": "4.4.4"
+        "typescript": "4.7.4"
     },
     "dependencies": {
         "@types/styled-components": "5.1.25",
