@@ -14,7 +14,7 @@
     "repository": "https://github.com/tkat0/obsidian-scrapbox-flavors",
     "devDependencies": {
         "@types/node": "16.11.6",
-        "@types/react": "18.0.9",
+        "@types/react": "18.0.15",
         "@types/react-dom": "18.0.5",
         "@typescript-eslint/eslint-plugin": "5.2.0",
         "@typescript-eslint/parser": "5.2.0",
