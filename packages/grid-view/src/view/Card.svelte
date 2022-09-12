@@ -4,7 +4,7 @@
     export let title: string;
     export let description: Description[][];
     export let icon: string | undefined = undefined;
-    export let star: boolean = false;
+    export let star = false;
     export let width: number;
     export let onClick: () => void;
 </script>

@@ -5,10 +5,14 @@
         "build": "pnpm -r --filter=./packages/** run build",
         "dev": "pnpm -r --parallel --filter=./packages/** run dev",
         "format": "prettier --plugin-search-dir=. --write ./packages/**/",
+        "lint": "eslint ./packages/**/*{.ts,.svelte}",
         "prepare": "husky install"
     },
     "devDependencies": {
         "@trivago/prettier-plugin-sort-imports": "^3.3.0",
+        "@typescript-eslint/parser": "5.2.0",
+        "eslint": "^8.23.1",
+        "eslint-plugin-svelte3": "^4.0.0",
         "husky": "^8.0.1",
         "prettier": "^2.7.1",
         "prettier-plugin-svelte": "^2.7.0",

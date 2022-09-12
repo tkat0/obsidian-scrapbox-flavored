@@ -29,7 +29,7 @@
     let searchRef: HTMLElement;
     $: pinStarred = settings.pinStarred;
     $: sort = settings.sort;
-    let search: string = '';
+    let search = '';
 
     let infiniteScrollTarget: HTMLElement;
 
