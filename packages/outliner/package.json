@@ -1,27 +1,27 @@
 {
-    "name": "@obsidian-scrapbox-flavored/outliner",
-    "version": "0.1.0",
-    "description": "Scrapbox-flavored outliner plugin for Obsidian",
-    "main": "./dist/main.js",
-    "scripts": {
-        "dev": "node esbuild.config.mjs",
-        "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
-        "version": "node version-bump.mjs && git add manifest.json versions.json"
-    },
-    "keywords": [],
-    "author": "tkat0",
-    "license": "MIT",
-    "repository": "https://github.com/tkat0/obsidian-scrapbox-flavored",
-    "devDependencies": {
-        "@codemirror/state": "^6.1.1",
-        "@codemirror/view": "^6.2.3",
-        "@types/node": "16.11.6",
-        "@typescript-eslint/eslint-plugin": "5.2.0",
-        "@typescript-eslint/parser": "5.2.0",
-        "builtin-modules": "3.2.0",
-        "esbuild": "0.13.12",
-        "obsidian": "0.16.0",
-        "tslib": "2.3.1",
-        "typescript": "4.4.4"
-    }
+  "name": "@obsidian-scrapbox-flavored/outliner",
+  "version": "0.1.0",
+  "description": "Scrapbox-flavored outliner plugin for Obsidian",
+  "main": "./dist/main.js",
+  "scripts": {
+    "dev": "node esbuild.config.mjs",
+    "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
+    "version": "node version-bump.mjs && git add manifest.json versions.json"
+  },
+  "keywords": [],
+  "author": "tkat0",
+  "license": "MIT",
+  "repository": "https://github.com/tkat0/obsidian-scrapbox-flavored",
+  "devDependencies": {
+    "@codemirror/state": "^6.1.1",
+    "@codemirror/view": "^6.2.3",
+    "@types/node": "16.11.6",
+    "@typescript-eslint/eslint-plugin": "5.2.0",
+    "@typescript-eslint/parser": "5.2.0",
+    "builtin-modules": "3.2.0",
+    "esbuild": "0.13.12",
+    "obsidian": "0.16.0",
+    "tslib": "2.3.1",
+    "typescript": "4.4.4"
+  }
 }

@@ -1,28 +1,28 @@
 {
-    "name": "obsidian-scrapbox-flavored-plugin",
-    "version": "0.1.0",
-    "private": true,
-    "description": "Scrapbox-flavored plugin for Obsidian",
-    "main": "main.js",
-    "scripts": {
-        "dev": "node esbuild.config.mjs",
-        "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
-        "version": "node version-bump.mjs && git add manifest.json versions.json"
-    },
-    "keywords": [],
-    "author": "tkat0",
-    "license": "MIT",
-    "repository": "https://github.com/tkat0/obsidian-scrapbox-flavored",
-    "devDependencies": {
-        "babel-loader": "^8.2.5",
-        "builtin-modules": "3.2.0",
-        "esbuild": "0.13.12",
-        "obsidian": "0.16.0",
-        "tslib": "2.3.1",
-        "typescript": "4.7.4"
-    },
-    "dependencies": {
-        "@obsidian-scrapbox-flavored/grid-view": "workspace:*",
-        "@obsidian-scrapbox-flavored/outliner": "workspace:*"
-    }
+  "name": "obsidian-scrapbox-flavored-plugin",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Scrapbox-flavored plugin for Obsidian",
+  "main": "main.js",
+  "scripts": {
+    "dev": "node esbuild.config.mjs",
+    "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
+    "version": "node version-bump.mjs && git add manifest.json versions.json"
+  },
+  "keywords": [],
+  "author": "tkat0",
+  "license": "MIT",
+  "repository": "https://github.com/tkat0/obsidian-scrapbox-flavored",
+  "devDependencies": {
+    "babel-loader": "^8.2.5",
+    "builtin-modules": "3.2.0",
+    "esbuild": "0.13.12",
+    "obsidian": "0.16.0",
+    "tslib": "2.3.1",
+    "typescript": "4.7.4"
+  },
+  "dependencies": {
+    "@obsidian-scrapbox-flavored/grid-view": "workspace:*",
+    "@obsidian-scrapbox-flavored/outliner": "workspace:*"
+  }
 }

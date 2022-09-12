@@ -9,38 +9,38 @@ import { GetPagesUsecaseImpl } from './usecase/GetPagesUsecase';
 import { PageObserveUsecaseImpl } from './usecase/PageObserveUsecase';
 
 export class GridView extends ItemView {
-    private component: GridComponent;
-    private obsidianAdapter: ObsidianAdapter;
-    static id = VIEW_IDENTIFIER;
+  private component: GridComponent;
+  private obsidianAdapter: ObsidianAdapter;
+  static id = VIEW_IDENTIFIER;
 
-    constructor(leaf: WorkspaceLeaf, private settings: GridViewSettings, private saveSettings: () => Promise<void>) {
-        super(leaf);
-        this.obsidianAdapter = new ObsidianAdapterImpl(this.app);
-    }
+  constructor(leaf: WorkspaceLeaf, private settings: GridViewSettings, private saveSettings: () => Promise<void>) {
+    super(leaf);
+    this.obsidianAdapter = new ObsidianAdapterImpl(this.app);
+  }
 
-    getViewType(): string {
-        return VIEW_IDENTIFIER;
-    }
+  getViewType(): string {
+    return VIEW_IDENTIFIER;
+  }
 
-    getDisplayText(): string {
-        return 'Scrapbox-flavored Grid View';
-    }
+  getDisplayText(): string {
+    return 'Scrapbox-flavored Grid View';
+  }
 
-    async onOpen(): Promise<void> {
-        this.component = new GridComponent({
-            target: this.contentEl,
-            props: {
-                getPagesUsecase: await GetPagesUsecaseImpl.init(this.obsidianAdapter),
-                contextMenuUsecase: new ContextMenuUsecaseImpl(this.obsidianAdapter),
-                pageObserveUsecase: new PageObserveUsecaseImpl(this.obsidianAdapter),
-                settings: this.settings,
-                saveSettings: this.saveSettings,
-            },
-        });
-    }
+  async onOpen(): Promise<void> {
+    this.component = new GridComponent({
+      target: this.contentEl,
+      props: {
+        getPagesUsecase: await GetPagesUsecaseImpl.init(this.obsidianAdapter),
+        contextMenuUsecase: new ContextMenuUsecaseImpl(this.obsidianAdapter),
+        pageObserveUsecase: new PageObserveUsecaseImpl(this.obsidianAdapter),
+        settings: this.settings,
+        saveSettings: this.saveSettings,
+      },
+    });
+  }
 
-    async onClose() {
-        this.component.$destroy();
-        this.obsidianAdapter.dispose();
-    }
+  async onClose() {
+    this.component.$destroy();
+    this.obsidianAdapter.dispose();
+  }
 }
