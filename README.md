@@ -8,13 +8,22 @@
 
 ### Grid View
 
-Show cards with a image or a description
+Show files as cards with a thumbnail or a description
 
 Command:
 
 -   **Open Scrapbox-flavored Grid View** (default: <kbd>Command</kbd> + <kbd>Shift</kbd> + <kbd>g</kbd>)
 
 <img src="./packages/grid-view/docs/view.png" width="600px" />
+
+You can explore pages in your vault efficiently.
+
+Grid View provides several features.
+
+- Search files by file path or tags
+- Sort files
+- Pin starred files (Enable `Starred` Core plugin to use this)
+- Context menu to delete a file or toggle star
 
 ### Outliner
 
