@@ -1,0 +1,5 @@
+packages:
+    - packages/plugin
+    - packages/grid-view
+    - packages/grid-view/core
+    - packages/outliner

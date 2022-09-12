@@ -1,0 +1,20 @@
+{
+    "name": "@obsidian-scrapbox-flavored/grid-view-core",
+    "version": "0.1.0",
+    "private": true,
+    "files": [
+        "./pkg/grid_view_core_bg.wasm",
+        "./pkg/grid_view_core.js",
+        "./pkg/grid_view_core.d.ts"
+    ],
+    "module": "./pkg/grid_view_core.js",
+    "types": "./pkg/grid_view_core.d.ts",
+    "sideEffects": false,
+    "exports": {
+        ".": "./pkg/grid_view_core.js",
+        "./pkg/*": "./pkg/*"
+    },
+    "scripts": {
+        "build": "wasm-pack build --target web -d pkg"
+    }
+}

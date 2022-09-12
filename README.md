@@ -1,22 +1,26 @@
-# Obsidian Scrapbox Flavors
+# Obsidian Scrapbox Flavored
 
-[Scrapbox](https://scrapbox.io/product)-flavored grid view and efficient list operations for [Obsidian](https://obsidian.md)
+[Scrapbox](https://scrapbox.io/product)-flavored Grid View and Outliner for [Obsidian](https://obsidian.md)
 
 **Note:** This plugin is still in early alpha and is subject to change at any time!
 
 ## Features
 
-### Scrapbox view
+### Grid View
 
 Show cards with a image or a description
 
 Command:
 
--   **Open scrapbox view** (default: <kbd>Command</kbd> + <kbd>Shift</kbd> + <kbd>s</kbd>)
+-   **Open Scrapbox-flavored Grid View** (default: <kbd>Command</kbd> + <kbd>Shift</kbd> + <kbd>g</kbd>)
 
-<img src="./docs/scrapbox-view.png" width="600px" />
+<img src="./packages/grid-view/docs/view.png" width="600px" />
 
-### List operations
+### Outliner
+
+Provide an effective list operations
+
+This feature is disabled in default. Enable it in the setting.
 
 <table>
 <thead>
@@ -34,7 +38,7 @@ Command:
 *) These are not commands. The hotkey can not be changed now.
 </td>
 <td>
-<img src="./docs/create-delete.gif" width="400px" />
+<img src="./packages/outliner/docs/create-delete.gif" width="400px" />
 </td>
 </tr>
 
@@ -45,7 +49,7 @@ Command:
 </ul>
 </td>
 <td>
-<img src="./docs/move-cursor.gif" width="400px" />
+<img src="./packages/outliner/docs/move-cursor.gif" width="400px" />
 </td>
 
 </tr>
@@ -55,7 +59,7 @@ Command:
 <li><b>Move down the current block of the list</b> (default: <kbd>Option</kbd> + <kbd>↓</kbd>)</li>
 </td>
 <td>
-<img src="./docs/move-up-down.gif" width="400px" />
+<img src="./packages/outliner/docs/move-up-down.gif" width="400px" />
 </td>
 </tr>
 
@@ -65,22 +69,20 @@ Command:
 <li><b>Outdent the selected block of the list</b> (default: <kbd>Option</kbd> + <kbd>←</kbd>)</li>
 </td>
 <td>
-<img src="./docs/indent-outdent.gif" width="400px" />
+<img src="./packages/outliner/docs/indent-outdent.gif" width="400px" />
 </td>
 </tr>
 </table>
 
 ## How to use
 
-This plugin is not registered as a community plugin yet.
-If you want to try, follow the following steps.
-
 -   Download this repository
--   Copy over `main.js`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/obsidian-scrapbox-flavors/`
+-   Run `pnpm install && pnpm run build`
+-   Copy over `./packages/plugin/{main.js, manifest.json}` to your vault `VaultFolder/.obsidian/plugins/obsidian-scrapbox-flavored`
 -   Enable this plugin in the Obsidian configuration.
--   Execute command `Scrapbox flavors: Open grid view` or open it from the sidebar icon
 
 ## Related plugins
+
 
 Scrapbox-like grid view
 
@@ -90,3 +92,10 @@ Scrapbox-like grid view
 Scrapbox-like list operation
 
 -   [vslinko/obsidian-outliner: Work with your lists like in Workflowy or RoamResearch](https://github.com/vslinko/obsidian-outliner)
+
+## Acknowledgements
+
+### Scrapbox
+
+This project was created based on [Scrapbox](https://scrapbox.io/product).
+Thank you for creating the great product.

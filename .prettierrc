@@ -1,0 +1,16 @@
+{
+    "printWidth": 120,
+    "trailingComma": "all",
+    "svelteSortOrder": "scripts-markup-styles",
+    "svelteBracketNewLine": true,
+    "svelteAllowShorthand": true,
+    "svelteIndentScriptAndStyle": true,
+    "singleQuote": true,
+    "importOrder": [
+        "<THIRD_PARTY_MODULES>",
+        "^@obsidian-scrapbox-flavored/.*$",
+        "^[./]"
+    ],
+    "importOrderSeparation": true,
+    "importOrderSortSpecifiers": true
+}
