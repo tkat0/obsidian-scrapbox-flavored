@@ -81,15 +81,27 @@ This feature is disabled in default. Enable it in the setting.
 -   Copy over `./packages/plugin/{main.js, manifest.json}` to your vault `VaultFolder/.obsidian/plugins/obsidian-scrapbox-flavored`
 -   Enable this plugin in the Obsidian configuration.
 
-## Related plugins
+## Roadmap
 
+These features will be implemented.
 
-Scrapbox-like grid view
+- import Scrapbox pages to Obsidian
+- export Obsidian pages to Scrapbox
+- code block in Markdown list like https://scrapbox.io/help/Syntax#58348ae2651ee500008d67df
+- related page list on each page like https://scrapbox.io/help/Related_pages
+
+## Related projects
+
+Scrapbox and Markdown parser used in this plugin
+
+- [tkat0/scrapbox-converter: Scrapbox to Markdown parser written in Rust](https://github.com/tkat0/scrapbox-converter)
+
+Obsidian Plugins of Scrapbox-like grid view
 
 -   [yo-goto/obsidian-card-view-mode: Obsidian Card View Mode Plugin](https://github.com/yo-goto/obsidian-card-view-mode)
 -   [qawatake/obsidian-card-view-switcher-plugin: An Obsidian plugin to provide a quick switcher with card view](https://github.com/qawatake/obsidian-card-view-switcher-plugin)
 
-Scrapbox-like list operation
+Obsidian Plugins of Scrapbox-like list operation
 
 -   [vslinko/obsidian-outliner: Work with your lists like in Workflowy or RoamResearch](https://github.com/vslinko/obsidian-outliner)
 
