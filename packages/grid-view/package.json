@@ -8,7 +8,7 @@
     "dev": "node esbuild.config.mjs",
     "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
     "version": "node version-bump.mjs && git add manifest.json versions.json",
-    "test": "vitest"
+    "test": "vitest --reporter verbose"
   },
   "keywords": [],
   "author": "tkat0",
@@ -16,6 +16,7 @@
   "repository": "https://github.com/tkat0/obsidian-scrapbox-flavored/packages/grid-view",
   "devDependencies": {
     "@babel/core": "^7.18.10",
+    "@sveltejs/vite-plugin-svelte": "^1.0.5",
     "@tsconfig/svelte": "^3.0.0",
     "@types/node": "16.11.6",
     "@types/throttle-debounce": "^5.0.0",
@@ -34,7 +35,10 @@
     "svelte-loading-spinners": "^0.1.7",
     "svelte-preprocess": "^4.10.7",
     "tslib": "2.3.1",
-    "typescript": "4.7.4"
+    "typescript": "4.7.4",
+    "vite": "^3.1.0",
+    "vitest": "^0.23.2",
+    "vitest-mock-extended": "^0.1.15"
   },
   "dependencies": {
     "@obsidian-scrapbox-flavored/grid-view-core": "workspace:*",

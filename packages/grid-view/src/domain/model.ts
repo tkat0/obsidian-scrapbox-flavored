@@ -1,5 +1,3 @@
-import type { Description } from '@obsidian-scrapbox-flavored/grid-view-core';
-
 export interface ICard {
   title: string;
   description: Description[][];
@@ -10,3 +8,9 @@ export interface ICard {
   toggleStar: () => void;
   trash: () => void;
 }
+
+export interface Description {
+  kind: 'normal' | 'code' | 'link' | 'emphasis' | 'image';
+  value: string;
+}
+[];

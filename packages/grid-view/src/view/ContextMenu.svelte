@@ -1,37 +1,25 @@
-import { Menu } from 'obsidian';
+<script lang="ts" context="module">
+  import { Menu } from 'obsidian';
+  import { getSortTitle } from 'src/domain/usecase/GetPagesUsecase';
+  import type { SortKind } from 'src/domain/usecase/GetPagesUsecase';
+  import { getContext } from 'svelte';
 
-import type { ObsidianAdapter } from '../adapter/ObsidianAdapter';
-import type { ICard } from '../model';
-import { getSortTitle } from './GetPagesUsecase';
-import type { SortKind } from './GetPagesUsecase';
+  import { ObsidianContextKey } from '../context';
+  import type { ObsidianContext } from '../context';
+  import type { ICard } from '../domain/model';
 
-export interface ContextMenuUsecase {
-  openCardMenu: (input: ContextMenuUsecaseOpenCardMenuInput) => void;
-  openSortMenu: (input: ContextMenuUsecaseOpenSortMenuInput) => void;
-}
+  export interface OpenCardMenuInput {
+    event: MouseEvent;
+    card: ICard;
+  }
 
-interface ContextMenuUsecaseOpenCardMenuInput {
-  event: MouseEvent;
-  card: ICard;
-}
-
-interface ContextMenuUsecaseOpenSortMenuInput {
-  current: SortKind;
-  pinStarred: boolean;
-  event: MouseEvent;
-  onSelect: (kind: SortKind) => void;
-  onPinStarredChange: (value: boolean) => void;
-}
-
-export class ContextMenuUsecaseImpl implements ContextMenuUsecase {
-  constructor(private obsidianAdapter: ObsidianAdapter) {}
-
-  openCardMenu(input: ContextMenuUsecaseOpenCardMenuInput) {
+  export function openCardMenu(input: OpenCardMenuInput) {
+    const ctx = getContext<ObsidianContext>(ObsidianContextKey);
     const { event, card } = input;
 
     const menu = new Menu();
 
-    if (this.obsidianAdapter.pluginEnabled('starred')) {
+    if (ctx.obsidian.pluginEnabled('starred')) {
       if (card.star) {
         menu.addItem((item) => {
           item
@@ -69,7 +57,15 @@ export class ContextMenuUsecaseImpl implements ContextMenuUsecase {
     menu.showAtMouseEvent(event);
   }
 
-  openSortMenu(input: ContextMenuUsecaseOpenSortMenuInput) {
+  export interface OpenSortMenuInput {
+    current: SortKind;
+    pinStarred: boolean;
+    event: MouseEvent;
+    onSelect: (kind: SortKind) => void;
+    onPinStarredChange: (value: boolean) => void;
+  }
+
+  export function openSortMenu(input: OpenSortMenuInput) {
     const { event, onSelect, current, onPinStarredChange, pinStarred } = input;
 
     const menu = new Menu();
@@ -104,4 +100,4 @@ export class ContextMenuUsecaseImpl implements ContextMenuUsecase {
 
     menu.showAtMouseEvent(event);
   }
-}
+</script>

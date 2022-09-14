@@ -1,72 +1,23 @@
-import type { CachedMetadata, TFile } from 'obsidian';
+import type { WasmAdapter } from 'src/domain/adapter/WasmAdapter';
+import type { GetPagesUsecase, GetPagesUsecaseInput } from 'src/domain/usecase/GetPagesUsecase';
 
-import init, { MarkdownConverter } from '@obsidian-scrapbox-flavored/grid-view-core';
-import type { Config, Description } from '@obsidian-scrapbox-flavored/grid-view-core';
-import wasm from '@obsidian-scrapbox-flavored/grid-view-core/pkg/grid_view_core_bg.wasm';
-
-import type { ObsidianAdapter } from '../adapter/ObsidianAdapter';
-import type { ICard } from '../model';
+import type { File, ObsidianAdapter } from '../domain/adapter/ObsidianAdapter';
+import type { ICard } from '../domain/model';
 
 const YAMLFrontMatter = /^(-{3}(?:\n|\r)([\w\W]+?)(?:\n|\r)-{3}\n)/;
 
-export interface GetPagesUsecase {
-  invoke: (input: GetPagesUsecaseInput) => Promise<ICard[]>;
-}
-
-export interface GetPagesUsecaseInput {
-  page: number;
-  size: number;
-  search: string;
-  sort: SortKind;
-  pinStarred: boolean;
-}
-
-// TODO: sort by file size
-// TODO: view count
-export type SortKind =
-  | 'file-name-a-to-z'
-  | 'file-name-z-to-a'
-  | 'modified-new-to-old'
-  | 'modified-old-to-new'
-  | 'created-new-to-old'
-  | 'created-old-to-new'
-  | 'most-linked'
-  | 'least-linked';
-
-export const getSortTitle = (kind: SortKind): string => {
-  switch (kind) {
-    case 'file-name-a-to-z':
-      return 'File name (Z to A)';
-    case 'file-name-z-to-a':
-      return 'File name (A to Z)';
-    case 'created-new-to-old':
-      return 'Created time (new to old)';
-    case 'created-old-to-new':
-      return 'Created time (old to new)';
-    case 'modified-new-to-old':
-      return 'Modified time (new to old)';
-    case 'modified-old-to-new':
-      return 'Modified time (old to new)';
-    case 'most-linked':
-      return 'Most Linked';
-    case 'least-linked':
-      return 'Least Linked';
-  }
-};
-
 export class GetPagesUsecaseImpl implements GetPagesUsecase {
-  private constructor(private obsidianAdapter: ObsidianAdapter) {}
+  private constructor(private obsidianAdapter: ObsidianAdapter, private wasmAdapter: WasmAdapter) {}
 
-  static async init(obsidianAdapter: ObsidianAdapter): Promise<GetPagesUsecase> {
-    const obj = new GetPagesUsecaseImpl(obsidianAdapter);
-    await init(wasm);
+  static async init(obsidianAdapter: ObsidianAdapter, wasmAdapter: WasmAdapter): Promise<GetPagesUsecase> {
+    const obj = new GetPagesUsecaseImpl(obsidianAdapter, wasmAdapter);
     return obj;
   }
 
   async invoke(input: GetPagesUsecaseInput): Promise<ICard[]> {
     const { page, size, search, sort, pinStarred } = input;
 
-    console.debug(`GetPage: ${size * page} - ${size * (page + 1) - 1}`, input);
+    console.debug(`GetPage: ${size * page} - ${size * (page + 1)}`, input);
 
     const starredPathes = this.obsidianAdapter.pluginEnabled('starred')
       ? this.obsidianAdapter.getStarredFile().map((f) => {
@@ -93,13 +44,13 @@ export class GetPagesUsecaseImpl implements GetPagesUsecase {
           if (search) {
             // search by file.path and #tag
             // e.g. #a #b #c
-            const tags = meta?.tags
-              ?.map(({ tag }) => {
+            const tags = meta.tags
+              .map((tag) => {
                 return `#${tag}`;
               })
               .join(' ');
             const ret = searchFun(`${file.path} ${tags}`);
-            return ret !== null;
+            return ret !== undefined;
           } else {
             return true;
           }
@@ -115,8 +66,8 @@ export class GetPagesUsecaseImpl implements GetPagesUsecase {
             }
           }
           // 2. sorted by date
-          const al = a.meta?.links?.length ?? 0;
-          const bl = b.meta?.links?.length ?? 0;
+          const al = a.meta.links;
+          const bl = b.meta.links;
           switch (sort) {
             case 'file-name-a-to-z':
               return a.file.name.localeCompare(b.file.name);
@@ -136,38 +87,21 @@ export class GetPagesUsecaseImpl implements GetPagesUsecase {
               return al - bl;
           }
         })
-        .slice(size * page, size * (page + 1) - 1)
+        .slice(size * page, size * (page + 1))
         .map(this.createCard),
     );
 
     return cards;
   }
 
-  private createCard = async (input: { file: TFile; star?: boolean; meta?: CachedMetadata }): Promise<ICard> => {
+  private createCard = async (input: { file: File; star?: boolean }): Promise<ICard> => {
     const { file, star } = input;
-
-    const config: Config = {
-      heading1Mapping: 3,
-      boldToHeading: false,
-      indent: {
-        type: 'Space',
-        size: 4,
-      },
-    };
-
     let content = await this.obsidianAdapter.cachedRead(file);
     content = content.replace(YAMLFrontMatter, ''); // remove front matter
 
     const title = file.basename;
 
-    // get 5 lines except new line
-    let description: Description[][] = [];
-    try {
-      const conveter = new MarkdownConverter(content + '\n', config);
-      description = conveter.description(5);
-    } catch (error) {
-      // console.error(title, error);
-    }
+    const description = this.wasmAdapter.getSummarizedDescription(content);
 
     // TODO: rewrite with visitor
     const icon = this.obsidianAdapter.getFirstImage(file, content);

@@ -1,4 +1,4 @@
-import type { SortKind } from './usecase/GetPagesUsecase';
+import type { SortKind } from './domain/usecase/GetPagesUsecase';
 
 export interface GridViewSettings {
   sort: SortKind;

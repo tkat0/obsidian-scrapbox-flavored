@@ -1,27 +1,28 @@
 <script lang="ts">
-  import { onDestroy, onMount } from 'svelte';
+  import { onMount, setContext } from 'svelte';
   import InfiniteScroll from 'svelte-infinite-scroll';
   import { throttle } from 'throttle-debounce';
 
-  import type { ICard } from './model';
+  import { ObsidianContextKey } from './context';
+  import type { ObsidianContext } from './context';
+  import type { ObsidianAdapter } from './domain/adapter/ObsidianAdapter.js';
+  import type { ICard } from './domain/model.js';
+  import { getSortTitle } from './domain/usecase/GetPagesUsecase';
+  import type { GetPagesUsecase } from './domain/usecase/GetPagesUsecase';
   import type { GridViewSettings } from './setting';
-  import type { ContextMenuUsecase } from './usecase/ContextMenuUsecase';
-  import { getSortTitle } from './usecase/GetPagesUsecase';
-  import type { GetPagesUsecase } from './usecase/GetPagesUsecase';
-  import type { PageObserveUsecase } from './usecase/PageObserveUsecase';
   import Card from './view/Card.svelte';
+  import { openCardMenu, openSortMenu } from './view/ContextMenu.svelte';
   import Icon from './view/Icon.svelte';
   import SearchBar from './view/SearchBar.svelte';
 
   export let getPagesUsecase: GetPagesUsecase;
-  export let contextMenuUsecase: ContextMenuUsecase;
-  export let pageObserveUsecase: PageObserveUsecase;
+  export let obsidianAdapter: ObsidianAdapter;
   export let settings: GridViewSettings;
   export let saveSettings: () => Promise<void>;
 
   let cards: ICard[] = [];
   let page = 0;
-  let size = 100;
+  let size = 10;
 
   let cardRef: HTMLElement[] = [];
   let gridWidth: number;
@@ -33,13 +34,17 @@
 
   let infiniteScrollTarget: HTMLElement;
 
+  setContext<ObsidianContext>(ObsidianContextKey, {
+    obsidian: obsidianAdapter,
+  });
+
   $: {
     // register callback for contextmenu
     cardRef.forEach((t, i) => {
       if (!t || t.oncontextmenu) return;
       t.oncontextmenu = (event) => {
         event.preventDefault();
-        contextMenuUsecase.openCardMenu({ event, card: cards[i] });
+        openCardMenu({ event, card: cards[i] });
       };
     });
   }
@@ -54,19 +59,11 @@
   }
 
   onMount(async () => {
-    console.debug('onMount');
     searchRef.focus();
-    pageObserveUsecase.invoke({
-      onChange: async () => {
-        console.log('reload');
-        await loadPages({ reloadAll: true });
-      },
+    obsidianAdapter.onFileChange(async () => {
+      await loadPages({ reloadAll: true });
     });
     await loadPages();
-  });
-
-  onDestroy(() => {
-    console.debug('onDestroy');
   });
 
   function onWindowResize() {
@@ -76,7 +73,7 @@
   }
 
   function onSortClick(event: MouseEvent) {
-    contextMenuUsecase.openSortMenu({
+    openSortMenu({
       current: sort,
       event,
       pinStarred,

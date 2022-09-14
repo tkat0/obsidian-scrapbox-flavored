@@ -94,8 +94,9 @@ This feature is disabled in default. Enable it in the setting.
 
 These features will be implemented.
 
-- import Scrapbox pages to Obsidian
-- export Obsidian pages to Scrapbox
+- data sync to Scrapbox
+    - import Scrapbox pages to Obsidian
+    - export Obsidian pages to Scrapbox
 - code block in Markdown list like https://scrapbox.io/help/Syntax#58348ae2651ee500008d67df
 - related page list on each page like https://scrapbox.io/help/Related_pages
 

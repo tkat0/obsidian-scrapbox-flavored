@@ -1,26 +1,9 @@
-import { type EventRef, MetadataCache, Vault, WorkspaceLeaf, prepareFuzzySearch } from 'obsidian';
-import type { App, CachedMetadata, SearchResult, TFile } from 'obsidian';
+import { type EventRef, setIcon } from 'obsidian';
+import { App, MetadataCache, TFile, Vault, WorkspaceLeaf, prepareFuzzySearch } from 'obsidian';
 
 import { GridView } from '../GridView';
 import { VIEW_IDENTIFIER } from '../const';
-
-export interface ObsidianAdapter {
-  getMetadata(file: TFile): CachedMetadata | undefined;
-  getMarkdownFiles(): TFile[];
-  cachedRead(file: TFile): Promise<string>;
-  openFile(file: TFile): Promise<void>;
-  trash(file: TFile, system: boolean): Promise<void>;
-  pluginEnabled(name: InternalPlugin): boolean;
-  getStarredFile(): TFile[];
-  createSearchFun(query: string): (text: string) => SearchResult | null;
-  toggleFileStar(file: TFile): void;
-  getFirstImage(file: TFile, content: string): string | undefined;
-  isViewActive(): boolean;
-  onFileChange(onChange: () => void): void;
-  dispose(): void;
-}
-
-export type InternalPlugin = 'starred';
+import type { File, InternalPlugin, Metadata, ObsidianAdapter, SearchResult } from '../domain/adapter/ObsidianAdapter';
 
 export class ObsidianAdapterImpl implements ObsidianAdapter {
   private starredPlugin?: any;
@@ -36,6 +19,10 @@ export class ObsidianAdapterImpl implements ObsidianAdapter {
     this.vaultEvents = [];
     this.workspaceEvents = [];
     this.starredPluginEvents = [];
+  }
+
+  setIcon(parent: HTMLElement, iconId: string, size?: number | undefined): void {
+    setIcon(parent, iconId, size);
   }
 
   dispose(): void {
@@ -82,9 +69,9 @@ export class ObsidianAdapterImpl implements ObsidianAdapter {
     return this.app.workspace.getActiveViewOfType(GridView) !== null;
   }
 
-  getFirstImage(file: TFile, content: string): string | undefined {
+  getFirstImage(file: File, content: string): string | undefined {
     const { vault, metadataCache } = this.app;
-    const [lImg, lPos] = getFirstLocalImage(vault, metadataCache, file);
+    const [lImg, lPos] = getFirstLocalImage(vault, metadataCache, file as TFile);
     const [rImg, rPos] = getFirstRemoteImage(content);
 
     // TODO(tkat0): Support excaildraw
@@ -100,35 +87,43 @@ export class ObsidianAdapterImpl implements ObsidianAdapter {
     }
   }
 
-  createSearchFun(query: string): (text: string) => SearchResult | null {
-    return prepareFuzzySearch(query);
+  createSearchFun(query: string): (text: string) => SearchResult | undefined {
+    const search = prepareFuzzySearch(query);
+    return (text: string) => {
+      const ret = search(text);
+      return ret ? { score: ret.score } : undefined;
+    };
   }
 
-  trash(file: TFile, system: boolean): Promise<void> {
-    return this.app.vault.trash(file, system);
+  trash(file: File, system: boolean): Promise<void> {
+    return this.app.vault.trash(file as TFile, system);
   }
 
-  toggleFileStar(file: TFile) {
+  toggleFileStar(file: File) {
     this.starredPlugin.instance.toggleFileStar(file);
   }
 
-  openFile(file: TFile): Promise<void> {
-    return this.app.workspace.getLeaf(true).openFile(file, { active: true });
+  openFile(file: File): Promise<void> {
+    return this.app.workspace.getLeaf(true).openFile(file as TFile, { active: true });
   }
 
-  cachedRead(file: TFile): Promise<string> {
-    return this.app.vault.cachedRead(file);
+  cachedRead(file: File): Promise<string> {
+    return this.app.vault.cachedRead(file as TFile);
   }
 
-  getMarkdownFiles(): TFile[] {
+  getMarkdownFiles(): File[] {
     return this.app.vault.getMarkdownFiles();
   }
 
-  getMetadata(file: TFile): CachedMetadata | undefined {
-    return this.app.metadataCache.getFileCache(file) ?? undefined;
+  getMetadata(file: File): Metadata {
+    const metadata = this.app.metadataCache.getFileCache(file as TFile);
+    return {
+      links: metadata?.links?.length ?? 0,
+      tags: metadata?.tags?.map(({ tag }) => tag) ?? [],
+    };
   }
 
-  getStarredFile(): TFile[] {
+  getStarredFile(): File[] {
     return this.starredPlugin.instance.items;
   }
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Description } from '@obsidian-scrapbox-flavored/grid-view-core';
+  import type { Description } from '../domain/model';
 
   export let title: string;
   export let description: Description[][];
