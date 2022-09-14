@@ -34,10 +34,12 @@ jobs:
       - name: Install wasm-pack
         run: cargo install wasm-pack
       - name: Build
-        id: build
         run: |
           pnpm install
           pnpm build
+      - name: Test
+        run: |
+          pnpm test
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
