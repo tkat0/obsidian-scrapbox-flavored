@@ -23,6 +23,7 @@
   let cards: ICard[] = [];
   let page = 0;
   let size = 100;
+  let hasMore = true;
 
   let cardRef: HTMLElement[] = [];
   let gridWidth: number;
@@ -57,6 +58,16 @@
     const expand = Math.trunc(space / nCards);
     cardWidth = 200 + expand - 1;
   }
+
+  $: (async () => {
+    if (!infiniteScrollTarget) return;
+
+    // load more until the page gets scrollable if it has more pages
+    const scrollable = infiniteScrollTarget.scrollHeight > window.screen.height;
+    if (cards.length > 0 && hasMore && true && !scrollable) {
+      await loadMore();
+    }
+  })();
 
   onMount(async () => {
     searchRef.focus();
@@ -105,13 +116,14 @@
       page = 0;
     }
     try {
-      const newCards = await getPagesUsecase.invoke({
+      const { cards: newCards, hasMore: hasMore_ } = await getPagesUsecase.invoke({
         page,
         size: option?.reloadAll ? cards.length : size,
         sort,
         search,
         pinStarred,
       });
+      hasMore = hasMore_;
       if (option?.reset || option?.reloadAll) {
         cards = newCards;
       } else {
@@ -158,7 +170,7 @@
       {/each}
     </div>
   </div>
-  <InfiniteScroll threshold={100} hasMore={true} on:loadMore={() => loadMore()} />
+  <InfiniteScroll threshold={100} {hasMore} on:loadMore={() => loadMore()} />
 </div>
 
 <style global lang="postcss">

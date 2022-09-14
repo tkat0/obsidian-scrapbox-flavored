@@ -43,7 +43,7 @@ describe('GetPagesUsecaseImpl', () => {
   });
 
   it('should sort by file-name-a-to-z', async () => {
-    const cards = await getPageUsecase.invoke({
+    const { cards } = await getPageUsecase.invoke({
       page: 0,
       size: 10,
       pinStarred: true,
@@ -55,7 +55,7 @@ describe('GetPagesUsecaseImpl', () => {
   });
 
   it('should sort by file-name-z-to-a', async () => {
-    const cards = await getPageUsecase.invoke({
+    const { cards } = await getPageUsecase.invoke({
       page: 0,
       size: 10,
       pinStarred: true,
@@ -67,7 +67,7 @@ describe('GetPagesUsecaseImpl', () => {
   });
 
   it('should sort by created-new-to-old', async () => {
-    const cards = await getPageUsecase.invoke({
+    const { cards } = await getPageUsecase.invoke({
       page: 0,
       size: 10,
       pinStarred: true,
@@ -79,7 +79,7 @@ describe('GetPagesUsecaseImpl', () => {
   });
 
   it('should sort by created-old-to-new', async () => {
-    const cards = await getPageUsecase.invoke({
+    const { cards } = await getPageUsecase.invoke({
       page: 0,
       size: 10,
       pinStarred: true,
@@ -91,7 +91,7 @@ describe('GetPagesUsecaseImpl', () => {
   });
 
   it('should sort by modified-new-to-old', async () => {
-    const cards = await getPageUsecase.invoke({
+    const { cards } = await getPageUsecase.invoke({
       page: 0,
       size: 10,
       pinStarred: true,
@@ -103,7 +103,7 @@ describe('GetPagesUsecaseImpl', () => {
   });
 
   it('should sort by modified-old-to-new', async () => {
-    const cards = await getPageUsecase.invoke({
+    const { cards } = await getPageUsecase.invoke({
       page: 0,
       size: 10,
       pinStarred: true,
@@ -129,7 +129,7 @@ describe('GetPagesUsecaseImpl', () => {
       }
     });
 
-    const cards = await getPageUsecase.invoke({
+    const { cards } = await getPageUsecase.invoke({
       page: 0,
       size: 10,
       pinStarred: true,
@@ -155,7 +155,7 @@ describe('GetPagesUsecaseImpl', () => {
       }
     });
 
-    const cards = await getPageUsecase.invoke({
+    const { cards } = await getPageUsecase.invoke({
       page: 0,
       size: 10,
       pinStarred: true,
@@ -166,8 +166,8 @@ describe('GetPagesUsecaseImpl', () => {
     expect(cards.map((card) => card.title)).toStrictEqual(['b', 'a']);
   });
 
-  it(`should return next page`, async () => {
-    const cards = await getPageUsecase.invoke({
+  it(`should return hasMore as true when it has more pages`, async () => {
+    const { cards, hasMore } = await getPageUsecase.invoke({
       page: 0,
       size: 1,
       pinStarred: true,
@@ -175,19 +175,21 @@ describe('GetPagesUsecaseImpl', () => {
       sort: 'modified-new-to-old',
     });
 
+    expect(hasMore).toBeTruthy();
     expect(cards.map((card) => card.title)).toStrictEqual(['a']);
   });
 
-  it(`shouldn't return a page if unavailable`, async () => {
-    const cards = await getPageUsecase.invoke({
-      page: 999,
-      size: 10,
+  it(`should return hasMore as false if it has no more pages`, async () => {
+    const { cards, hasMore } = await getPageUsecase.invoke({
+      page: 1,
+      size: 1,
       pinStarred: true,
       search: '',
-      sort: 'modified-old-to-new',
+      sort: 'modified-new-to-old',
     });
 
-    expect(cards).toStrictEqual([]);
+    expect(hasMore).toBeFalsy();
+    expect(cards.map((card) => card.title)).toStrictEqual(['b']);
   });
 
   it(`should search by file path`, async () => {
@@ -199,7 +201,7 @@ describe('GetPagesUsecaseImpl', () => {
       }
     });
 
-    const cards = await getPageUsecase.invoke({
+    const { cards } = await getPageUsecase.invoke({
       page: 0,
       size: 10,
       pinStarred: true,
@@ -233,7 +235,7 @@ describe('GetPagesUsecaseImpl', () => {
       }
     });
 
-    const cards = await getPageUsecase.invoke({
+    const { cards } = await getPageUsecase.invoke({
       page: 0,
       size: 10,
       pinStarred: true,
@@ -275,7 +277,7 @@ describe('GetPagesUsecaseImpl', () => {
     obsidianAdapter.pluginEnabled.calledWith('starred').mockReturnValue(true);
     obsidianAdapter.getStarredFile.mockReturnValue([a]);
 
-    const cards = await getPageUsecase.invoke({
+    const { cards } = await getPageUsecase.invoke({
       page: 0,
       size: 10,
       pinStarred: true,

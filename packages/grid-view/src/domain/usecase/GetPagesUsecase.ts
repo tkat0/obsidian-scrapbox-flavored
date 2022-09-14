@@ -1,7 +1,7 @@
 import type { ICard } from '../model';
 
 export interface GetPagesUsecase {
-  invoke: (input: GetPagesUsecaseInput) => Promise<ICard[]>;
+  invoke: (input: GetPagesUsecaseInput) => Promise<GetPagesUsecaseOutput>;
 }
 
 export interface GetPagesUsecaseInput {
@@ -10,6 +10,11 @@ export interface GetPagesUsecaseInput {
   search: string;
   sort: SortKind;
   pinStarred: boolean;
+}
+
+export interface GetPagesUsecaseOutput {
+  cards: ICard[];
+  hasMore: boolean;
 }
 
 // TODO: sort by file size
