@@ -22,7 +22,7 @@
 
   let cards: ICard[] = [];
   let page = 0;
-  let size = 10;
+  let size = 100;
 
   let cardRef: HTMLElement[] = [];
   let gridWidth: number;
