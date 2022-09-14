@@ -2,9 +2,6 @@
   import { Menu } from 'obsidian';
   import { getSortTitle } from 'src/domain/usecase/GetPagesUsecase';
   import type { SortKind } from 'src/domain/usecase/GetPagesUsecase';
-  import { getContext } from 'svelte';
-
-  import { ObsidianContextKey } from '../context';
   import type { ObsidianContext } from '../context';
   import type { ICard } from '../domain/model';
 
@@ -13,8 +10,7 @@
     card: ICard;
   }
 
-  export function openCardMenu(input: OpenCardMenuInput) {
-    const ctx = getContext<ObsidianContext>(ObsidianContextKey);
+  export function openCardMenu(input: OpenCardMenuInput, ctx: ObsidianContext) {
     const { event, card } = input;
 
     const menu = new Menu();

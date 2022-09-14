@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount, setContext } from 'svelte';
+  import { getContext, onMount, setContext } from 'svelte';
   import InfiniteScroll from 'svelte-infinite-scroll';
   import { throttle } from 'throttle-debounce';
 
@@ -39,13 +39,15 @@
     obsidian: obsidianAdapter,
   });
 
+  let ctx = getContext<ObsidianContext>(ObsidianContextKey);
+
   $: {
     // register callback for contextmenu
     cardRef.forEach((t, i) => {
       if (!t || t.oncontextmenu) return;
       t.oncontextmenu = (event) => {
         event.preventDefault();
-        openCardMenu({ event, card: cards[i] });
+        openCardMenu({ event, card: cards[i] }, ctx);
       };
     });
   }
