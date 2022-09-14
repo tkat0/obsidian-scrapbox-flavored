@@ -2,6 +2,7 @@
   import { Menu } from 'obsidian';
   import { getSortTitle } from 'src/domain/usecase/GetPagesUsecase';
   import type { SortKind } from 'src/domain/usecase/GetPagesUsecase';
+
   import type { ObsidianContext } from '../context';
   import type { ICard } from '../domain/model';
 
