@@ -3,6 +3,7 @@
     "baseUrl": ".",
     "inlineSourceMap": true,
     "inlineSources": true,
+    "types": ["node", "vitest/globals"],
     "module": "ESNext",
     "target": "ES6",
     "allowJs": true,

@@ -17,7 +17,7 @@ export class GetPagesUsecaseImpl implements GetPagesUsecase {
   async invoke(input: GetPagesUsecaseInput): Promise<GetPagesUsecaseOutput> {
     const { page, size, search, sort, pinStarred } = input;
 
-    console.debug(`GetPage: ${size * page} - ${size * (page + 1)}`, input);
+    // console.debug(`GetPage: ${size * page} - ${size * (page + 1)}`, input);
 
     const starredPathes = this.obsidianAdapter.pluginEnabled('starred')
       ? this.obsidianAdapter.getStarredFile().map((f) => {
@@ -104,7 +104,6 @@ export class GetPagesUsecaseImpl implements GetPagesUsecase {
 
     const description = this.wasmAdapter.getSummarizedDescription(content);
 
-    // TODO: rewrite with visitor
     const icon = this.obsidianAdapter.getFirstImage(file, content);
 
     return {

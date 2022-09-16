@@ -158,6 +158,7 @@ const getFirstLocalImage = (
 const getFirstRemoteImage = (content: string): [string, number] | [undefined, undefined] => {
   const lines = content.split('\n');
 
+  // TODO: rewrite with Wasm
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
 

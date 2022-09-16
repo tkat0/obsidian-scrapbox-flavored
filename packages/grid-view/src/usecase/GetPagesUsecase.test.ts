@@ -51,7 +51,7 @@ describe('GetPagesUsecaseImpl', () => {
       sort: 'file-name-a-to-z',
     });
 
-    expect(cards.map((card) => card.title)).toStrictEqual(['a', 'b']);
+    expect(cards.map((card) => card.title)).toEqual(['a', 'b']);
   });
 
   it('should sort by file-name-z-to-a', async () => {
@@ -63,7 +63,7 @@ describe('GetPagesUsecaseImpl', () => {
       sort: 'file-name-z-to-a',
     });
 
-    expect(cards.map((card) => card.title)).toStrictEqual(['b', 'a']);
+    expect(cards.map((card) => card.title)).toEqual(['b', 'a']);
   });
 
   it('should sort by created-new-to-old', async () => {
@@ -75,7 +75,7 @@ describe('GetPagesUsecaseImpl', () => {
       sort: 'created-new-to-old',
     });
 
-    expect(cards.map((card) => card.title)).toStrictEqual(['b', 'a']);
+    expect(cards.map((card) => card.title)).toEqual(['b', 'a']);
   });
 
   it('should sort by created-old-to-new', async () => {
@@ -87,7 +87,7 @@ describe('GetPagesUsecaseImpl', () => {
       sort: 'created-old-to-new',
     });
 
-    expect(cards.map((card) => card.title)).toStrictEqual(['a', 'b']);
+    expect(cards.map((card) => card.title)).toEqual(['a', 'b']);
   });
 
   it('should sort by modified-new-to-old', async () => {
@@ -99,7 +99,7 @@ describe('GetPagesUsecaseImpl', () => {
       sort: 'modified-new-to-old',
     });
 
-    expect(cards.map((card) => card.title)).toStrictEqual(['a', 'b']);
+    expect(cards.map((card) => card.title)).toEqual(['a', 'b']);
   });
 
   it('should sort by modified-old-to-new', async () => {
@@ -111,7 +111,7 @@ describe('GetPagesUsecaseImpl', () => {
       sort: 'modified-old-to-new',
     });
 
-    expect(cards.map((card) => card.title)).toStrictEqual(['b', 'a']);
+    expect(cards.map((card) => card.title)).toEqual(['b', 'a']);
   });
 
   it(`should sort by most-linked`, async () => {
@@ -137,7 +137,7 @@ describe('GetPagesUsecaseImpl', () => {
       sort: 'most-linked',
     });
 
-    expect(cards.map((card) => card.title)).toStrictEqual(['a', 'b']);
+    expect(cards.map((card) => card.title)).toEqual(['a', 'b']);
   });
 
   it(`should sort by least-linked`, async () => {
@@ -163,7 +163,7 @@ describe('GetPagesUsecaseImpl', () => {
       sort: 'least-linked',
     });
 
-    expect(cards.map((card) => card.title)).toStrictEqual(['b', 'a']);
+    expect(cards.map((card) => card.title)).toEqual(['b', 'a']);
   });
 
   it(`should return hasMore as true when it has more pages`, async () => {
@@ -176,7 +176,7 @@ describe('GetPagesUsecaseImpl', () => {
     });
 
     expect(hasMore).toBeTruthy();
-    expect(cards.map((card) => card.title)).toStrictEqual(['a']);
+    expect(cards.map((card) => card.title)).toEqual(['a']);
   });
 
   it(`should return hasMore as false if it has no more pages`, async () => {
@@ -189,7 +189,7 @@ describe('GetPagesUsecaseImpl', () => {
     });
 
     expect(hasMore).toBeFalsy();
-    expect(cards.map((card) => card.title)).toStrictEqual(['b']);
+    expect(cards.map((card) => card.title)).toEqual(['b']);
   });
 
   it(`should search by file path`, async () => {
@@ -209,7 +209,7 @@ describe('GetPagesUsecaseImpl', () => {
       sort: 'modified-old-to-new',
     });
 
-    expect(cards.map((card) => card.title)).toStrictEqual(['a']);
+    expect(cards.map((card) => card.title)).toEqual(['a']);
   });
 
   it(`should search by tag`, async () => {
@@ -243,7 +243,7 @@ describe('GetPagesUsecaseImpl', () => {
       sort: 'modified-old-to-new',
     });
 
-    expect(cards.map((card) => card.title)).toStrictEqual(['a']);
+    expect(cards.map((card) => card.title)).toEqual(['a']);
   });
 
   it(`should pin starred cards`, async () => {
