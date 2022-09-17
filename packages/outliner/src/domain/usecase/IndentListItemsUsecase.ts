@@ -6,6 +6,10 @@ export class IndentListItemsUsecase {
   constructor(private adapter: ObsidianAdapter, private readListBlockUsecase: ReadListBlockUsecase) {}
 
   invoke(direction: IndentDirection): IndentListItemsUsecaseOutput {
+    if (!this.adapter.canIndent()) {
+      return { changedLineNo: [] };
+    }
+
     const { lineNo, text } = this.adapter.readCurrentLine();
     const { block, currentIndex } = this.readListBlockUsecase.invoke(lineNo);
 

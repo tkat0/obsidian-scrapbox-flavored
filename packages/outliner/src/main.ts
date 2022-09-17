@@ -38,7 +38,7 @@ export default class OutlinerPlugin extends Plugin {
       id: 'move-up-current-block-of-list',
       name: 'Move up the current block of the list',
       editorCallback: (editor, _markdown) => {
-        const obsidianAdapter = new ObsidianAdapterImpl(editor, config);
+        const obsidianAdapter = new ObsidianAdapterImpl(this.app, editor, config);
         const readListBlockUsecase = new ReadListBlockUsecase(obsidianAdapter);
         const usecase = new SwapListItemsUseacase(obsidianAdapter, readListBlockUsecase);
         usecase.invoke('up');
@@ -50,7 +50,7 @@ export default class OutlinerPlugin extends Plugin {
       id: 'move-down-current-block-of-list',
       name: 'Move down the current block of the list',
       editorCallback: (editor, _markdown) => {
-        const obsidianAdapter = new ObsidianAdapterImpl(editor, config);
+        const obsidianAdapter = new ObsidianAdapterImpl(this.app, editor, config);
         const readListBlockUsecase = new ReadListBlockUsecase(obsidianAdapter);
         const usecase = new SwapListItemsUseacase(obsidianAdapter, readListBlockUsecase);
         usecase.invoke('down');
@@ -62,7 +62,7 @@ export default class OutlinerPlugin extends Plugin {
       id: 'indent-selected-block-of-list',
       name: 'Indent the selected block of the list',
       editorCallback: (editor, _markdown) => {
-        const obsidianAdapter = new ObsidianAdapterImpl(editor, config);
+        const obsidianAdapter = new ObsidianAdapterImpl(this.app, editor, config);
         const readListBlockUsecase = new ReadListBlockUsecase(obsidianAdapter);
         const usecase = new IndentListItemsUsecase(obsidianAdapter, readListBlockUsecase);
         usecase.invoke('indent');
@@ -70,7 +70,7 @@ export default class OutlinerPlugin extends Plugin {
       hotkeys: [
         { modifiers: ['Alt'], key: 'ArrowRight' },
         { modifiers: [], key: 'Tab' },
-        // { modifiers: [], key: 'Space' }, // TODO
+        // { modifiers: [], key: 'Space' },
       ],
     });
 
@@ -78,7 +78,7 @@ export default class OutlinerPlugin extends Plugin {
       id: 'outdent-selected-block-of-list',
       name: 'Outndent the selected block of the list',
       editorCallback: (editor, _markdown) => {
-        const obsidianAdapter = new ObsidianAdapterImpl(editor, config);
+        const obsidianAdapter = new ObsidianAdapterImpl(this.app, editor, config);
         const readListBlockUsecase = new ReadListBlockUsecase(obsidianAdapter);
         const usecase = new IndentListItemsUsecase(obsidianAdapter, readListBlockUsecase);
         usecase.invoke('outdent');
@@ -86,7 +86,7 @@ export default class OutlinerPlugin extends Plugin {
       hotkeys: [
         { modifiers: ['Alt'], key: 'ArrowLeft' },
         { modifiers: ['Shift'], key: 'Tab' },
-        // { modifiers: [], key: 'Backspace' }, // TODO
+        // { modifiers: [], key: 'Backspace' },
       ],
     });
   }

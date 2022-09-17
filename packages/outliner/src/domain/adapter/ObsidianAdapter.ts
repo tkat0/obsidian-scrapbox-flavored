@@ -1,6 +1,7 @@
 import type { IndentDirection, LineNo, LineRange, ListBlock, ListItem } from '../model';
 
 export interface ObsidianAdapter {
+  canIndent(): boolean;
   lineCount(): number;
   readLine(lineNo: LineNo): string | undefined;
   readCurrentLine(): ReadCurrentLineOutput;
