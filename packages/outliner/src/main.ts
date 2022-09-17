@@ -19,6 +19,7 @@ export default class OutlinerPlugin extends Plugin {
     this.addCommand({
       id: 'move-cursor-beginning-of-line',
       name: 'Move cursor to the beginning of the line',
+      repeatable: true,
       editorCallback: (editor, _markdown) => {
         moveCursorToBegin(editor);
       },
@@ -28,6 +29,7 @@ export default class OutlinerPlugin extends Plugin {
     this.addCommand({
       id: 'move-cursor-end-of-line',
       name: 'Move cursor to the end of the line',
+      repeatable: true,
       editorCallback: (editor, _markdown) => {
         moveCursorToEnd(editor);
       },
@@ -37,6 +39,7 @@ export default class OutlinerPlugin extends Plugin {
     this.addCommand({
       id: 'move-up-current-block-of-list',
       name: 'Move up the current block of the list',
+      repeatable: true,
       editorCallback: (editor, _markdown) => {
         const obsidianAdapter = new ObsidianAdapterImpl(this.app, editor, config);
         const readListBlockUsecase = new ReadListBlockUsecase(obsidianAdapter);
@@ -49,6 +52,7 @@ export default class OutlinerPlugin extends Plugin {
     this.addCommand({
       id: 'move-down-current-block-of-list',
       name: 'Move down the current block of the list',
+      repeatable: true,
       editorCallback: (editor, _markdown) => {
         const obsidianAdapter = new ObsidianAdapterImpl(this.app, editor, config);
         const readListBlockUsecase = new ReadListBlockUsecase(obsidianAdapter);
@@ -61,6 +65,7 @@ export default class OutlinerPlugin extends Plugin {
     this.addCommand({
       id: 'indent-selected-block-of-list',
       name: 'Indent the selected block of the list',
+      repeatable: true,
       editorCallback: (editor, _markdown) => {
         const obsidianAdapter = new ObsidianAdapterImpl(this.app, editor, config);
         const readListBlockUsecase = new ReadListBlockUsecase(obsidianAdapter);
@@ -77,6 +82,7 @@ export default class OutlinerPlugin extends Plugin {
     this.addCommand({
       id: 'outdent-selected-block-of-list',
       name: 'Outndent the selected block of the list',
+      repeatable: true,
       editorCallback: (editor, _markdown) => {
         const obsidianAdapter = new ObsidianAdapterImpl(this.app, editor, config);
         const readListBlockUsecase = new ReadListBlockUsecase(obsidianAdapter);
