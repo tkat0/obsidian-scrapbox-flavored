@@ -18,6 +18,9 @@ export interface LineRange {
   end: LineNo;
 }
 
+/** The markdown sections where list items should not be placed */
+export const EXCLUDE_LIST_SECTIONS = ['code', 'table', 'heading'];
+
 /**
  * matches line as follows.
  *  " - ", " * ", " 1. "

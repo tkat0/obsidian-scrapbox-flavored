@@ -1,6 +1,6 @@
 import { App, Editor, EditorChange, VaultConfig } from 'obsidian';
 import type { ObsidianAdapter, ReadCurrentLineOutput } from 'src/domain/adapter/ObsidianAdapter';
-import { IndentDirection, LineNo, LineRange, ListItem } from 'src/domain/model';
+import { EXCLUDE_LIST_SECTIONS, IndentDirection, LineNo, LineRange, ListItem } from 'src/domain/model';
 
 export class ObsidianAdapterImpl implements ObsidianAdapter {
   constructor(private app: App, private editor: Editor, private config: VaultConfig) {}
@@ -14,7 +14,7 @@ export class ObsidianAdapterImpl implements ObsidianAdapter {
       for (const section of sections) {
         const { position, type } = section;
         if (position.start.line <= line && line <= position.end.line) {
-          if (['code', 'table', 'heading'].includes(type)) {
+          if (EXCLUDE_LIST_SECTIONS.includes(type)) {
             return false;
           }
         }
