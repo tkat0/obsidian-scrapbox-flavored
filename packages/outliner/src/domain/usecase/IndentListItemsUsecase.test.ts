@@ -18,6 +18,7 @@ describe('IndentListItemsUsecase', () => {
     obsidian.readCurrentLine.mockReturnValue({ lineNo, text: page[lineNo] });
     obsidian.readLine.mockImplementation((lineNo) => page[lineNo]);
     obsidian.lineCount.mockReturnValue(page.length);
+    obsidian.canIndent.mockReturnValue(true);
   };
 
   it(`should indent with no list item`, async () => {
@@ -40,6 +41,23 @@ describe('IndentListItemsUsecase', () => {
     const { changedLineNo } = indentListItemsUsecase.invoke('indent');
 
     expect(changedLineNo).toEqual([]);
+  });
+
+  it(`should indent and unindent on several sections`, async () => {
+    const page = ['```', 'inside code block', '```'];
+    const lineNo = 1;
+
+    setMock(page, lineNo);
+    obsidian.canIndent.mockReturnValue(false);
+
+    {
+      const { changedLineNo } = indentListItemsUsecase.invoke('indent');
+      expect(changedLineNo).toEqual([]);
+    }
+    {
+      const { changedLineNo } = indentListItemsUsecase.invoke('outdent');
+      expect(changedLineNo).toEqual([]);
+    }
   });
 
   it(`should indent`, async () => {
