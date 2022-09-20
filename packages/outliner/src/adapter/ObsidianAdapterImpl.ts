@@ -7,6 +7,15 @@ import { EXCLUDE_LIST_SECTIONS, IndentDirection, LineNo, LineRange, ListItem } f
 export class ObsidianAdapterImpl implements ObsidianAdapter {
   constructor(private app: App, private editor: EditorView, private config: VaultConfig) {}
 
+  setCursor(line: number, ch: number) {
+    const { from } = this.editor.state.doc.line(line);
+    this.editor.dispatch({
+      selection: {
+        anchor: from + ch,
+      },
+    });
+  }
+
   getCursor(): GetCursorOutput {
     const anchor = this.editor.state.selection.ranges[0].anchor;
     const { from, number } = this.editor.state.doc.lineAt(anchor);

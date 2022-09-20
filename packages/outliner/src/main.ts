@@ -4,9 +4,9 @@ import { Plugin } from 'obsidian';
 
 import { ObsidianAdapterImpl } from './adapter/ObsidianAdapterImpl';
 import { IndentListItemsUsecase, IndentListItemsUsecaseOutput } from './domain/usecase/IndentListItemsUsecase';
+import { MoveCursorUsecase } from './domain/usecase/MoveCursorUsecase';
 import { ReadListBlockUsecase } from './domain/usecase/ReadListBlockUsecase';
 import { SwapListItemsUseacase } from './domain/usecase/SwapListItemsUsecase';
-import { moveCursorToBegin, moveCursorToEnd } from './features/listop';
 import type { OutlinerSettings } from './setting';
 import { DEFAULT_SETTINGS } from './setting';
 
@@ -40,6 +40,24 @@ export default class OutlinerPlugin extends Plugin {
     this.registerEditorExtension(
       Prec.highest(
         keymap.of([
+          {
+            key: 'Ctrl-a',
+            run: (target) => {
+              const obsidianAdapter = new ObsidianAdapterImpl(this.app, target, config);
+              const usecase = new MoveCursorUsecase(obsidianAdapter);
+              usecase.invoke('begin');
+              return true;
+            },
+          },
+          {
+            key: 'Ctrl-e',
+            run: (target) => {
+              const obsidianAdapter = new ObsidianAdapterImpl(this.app, target, config);
+              const usecase = new MoveCursorUsecase(obsidianAdapter);
+              usecase.invoke('end');
+              return true;
+            },
+          },
           {
             key: 'Alt-ArrowUp',
             run: (target) => {
@@ -105,25 +123,5 @@ export default class OutlinerPlugin extends Plugin {
         ]),
       ),
     );
-
-    this.addCommand({
-      id: 'move-cursor-beginning-of-line',
-      name: 'Move cursor to the beginning of the line',
-      repeatable: true,
-      editorCallback: (editor, _markdown) => {
-        moveCursorToBegin(editor);
-      },
-      hotkeys: [{ modifiers: ['Ctrl'], key: 'a' }],
-    });
-
-    this.addCommand({
-      id: 'move-cursor-end-of-line',
-      name: 'Move cursor to the end of the line',
-      repeatable: true,
-      editorCallback: (editor, _markdown) => {
-        moveCursorToEnd(editor);
-      },
-      hotkeys: [{ modifiers: ['Ctrl'], key: 'e' }],
-    });
   }
 }
