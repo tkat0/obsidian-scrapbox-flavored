@@ -88,6 +88,8 @@ importers:
 
   packages/outliner:
     specifiers:
+      '@codemirror/state': ^6.1.1
+      '@codemirror/view': ^6.2.4
       '@types/node': 16.11.6
       '@typescript-eslint/eslint-plugin': 5.2.0
       '@typescript-eslint/parser': 5.2.0
@@ -100,12 +102,14 @@ importers:
       vitest: ^0.23.2
       vitest-mock-extended: ^0.1.15
     devDependencies:
+      '@codemirror/state': 6.1.1
+      '@codemirror/view': 6.2.4
       '@types/node': 16.11.6
       '@typescript-eslint/eslint-plugin': 5.2.0_gyye5dnv37ghluzt6qqk2nxhxe
       '@typescript-eslint/parser': 5.2.0_typescript@4.4.4
       builtin-modules: 3.2.0
       esbuild: 0.13.12
-      obsidian: 0.16.0
+      obsidian: 0.16.0_i7qyacltc5yis7vfg7tlbipfum
       tslib: 2.3.1
       typescript: 4.4.4
       vite: 3.1.0
@@ -413,6 +417,18 @@ packages:
       '@babel/helper-string-parser': 7.18.10
       '@babel/helper-validator-identifier': 7.18.6
       to-fast-properties: 2.0.0
+    dev: true
+
+  /@codemirror/state/6.1.1:
+    resolution: {integrity: sha512-2s+aXsxmAwnR3Rd+JDHPG/1lw0YsA9PEwl7Re88gHJHGfxyfEzKBmsN4rr53RyPIR4lzbbhJX0DCq0WlqlBIRw==}
+    dev: true
+
+  /@codemirror/view/6.2.4:
+    resolution: {integrity: sha512-Zc5qDv+CD2ubWs6ShGJL0tf4y2w5vObdg7Eus0ouhg9g5lrvsAnwO9PvavDZdK4bpH6O+cnNDRhFlvDuieXo/g==}
+    dependencies:
+      '@codemirror/state': 6.1.1
+      style-mod: 4.0.0
+      w3c-keyname: 2.2.6
     dev: true
 
   /@esbuild/linux-loong64/0.15.7:
@@ -2429,6 +2445,18 @@ packages:
       moment: 2.29.4
     dev: true
 
+  /obsidian/0.16.0_i7qyacltc5yis7vfg7tlbipfum:
+    resolution: {integrity: sha512-KnQu1CntLz/EqA50W0zwlCqMgLbvMMfW2nmNQV4aMPW/aSYyjmnRMEwO0rAThQGhJPabDm2okVUSeXLctC/aMA==}
+    peerDependencies:
+      '@codemirror/state': ^6.0.0
+      '@codemirror/view': ^6.0.0
+    dependencies:
+      '@codemirror/state': 6.1.1
+      '@codemirror/view': 6.2.4
+      '@types/codemirror': 0.0.108
+      moment: 2.29.4
+    dev: true
+
   /once/1.4.0:
     resolution: {integrity: sha512-lNaJgI+2Q5URQBkccEKHTQOPaXdUxnZZElQTZY0MFUAuaEqe1E+Nyvgdz/aIyNi6Z9MzO5dv1H8n58/GELp3+w==}
     dependencies:
@@ -2856,6 +2884,10 @@ packages:
     resolution: {integrity: sha512-z+F/xmDM8GOdvA5UoZXFxEnxdvMOZ+XEBIwjfLfc8hMSuHpGxjXAUCfuEo+t1GOHSb8+qgI/IBRpxXVMaABYWA==}
     dependencies:
       acorn: 8.8.0
+    dev: true
+
+  /style-mod/4.0.0:
+    resolution: {integrity: sha512-OPhtyEjyyN9x3nhPsu76f52yUGXiZcgvsrFVtvTkyGRQJ0XK+GPc6ov1z+lRpbeabka+MYEQxOYRnt5nF30aMw==}
     dev: true
 
   /supports-color/5.5.0:
@@ -3312,6 +3344,10 @@ packages:
     resolution: {integrity: sha512-z8P5DvDNjKDoFIHK7q8r8lackT6l+jo/Ye3HOle7l9nICP9lf1Ci25fy9vHd0JOWewkIFzXIEig3TdKT7JQ5fQ==}
     dependencies:
       browser-process-hrtime: 1.0.0
+    dev: true
+
+  /w3c-keyname/2.2.6:
+    resolution: {integrity: sha512-f+fciywl1SJEniZHD6H+kUO8gOnwIr7f4ijKA6+ZvJFjeGi1r4PDLl53Ayud9O/rk64RqgoQine0feoeOU0kXg==}
     dev: true
 
   /w3c-xmlserializer/3.0.0:

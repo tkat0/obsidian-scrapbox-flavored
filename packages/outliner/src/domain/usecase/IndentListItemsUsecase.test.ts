@@ -19,6 +19,7 @@ describe('IndentListItemsUsecase', () => {
     obsidian.readLine.mockImplementation((lineNo) => page[lineNo]);
     obsidian.lineCount.mockReturnValue(page.length);
     obsidian.canIndent.mockReturnValue(true);
+    obsidian.getCursor.mockReturnValue({ offset: 0, line: 0, anchor: 0 });
   };
 
   it(`should indent with no list item`, async () => {
@@ -27,7 +28,7 @@ describe('IndentListItemsUsecase', () => {
 
     setMock(page, lineNo);
 
-    const { changedLineNo } = indentListItemsUsecase.invoke('indent');
+    const { changedLineNo } = indentListItemsUsecase.invoke({ direction: 'indent' });
 
     expect(changedLineNo).toEqual([0]);
   });
@@ -38,7 +39,7 @@ describe('IndentListItemsUsecase', () => {
 
     setMock(page, lineNo);
 
-    const { changedLineNo } = indentListItemsUsecase.invoke('indent');
+    const { changedLineNo } = indentListItemsUsecase.invoke({ direction: 'indent' });
 
     expect(changedLineNo).toEqual([]);
   });
@@ -51,11 +52,11 @@ describe('IndentListItemsUsecase', () => {
     obsidian.canIndent.mockReturnValue(false);
 
     {
-      const { changedLineNo } = indentListItemsUsecase.invoke('indent');
+      const { changedLineNo } = indentListItemsUsecase.invoke({ direction: 'indent' });
       expect(changedLineNo).toEqual([]);
     }
     {
-      const { changedLineNo } = indentListItemsUsecase.invoke('outdent');
+      const { changedLineNo } = indentListItemsUsecase.invoke({ direction: 'outdent' });
       expect(changedLineNo).toEqual([]);
     }
   });
@@ -66,7 +67,7 @@ describe('IndentListItemsUsecase', () => {
 
     setMock(page, lineNo);
 
-    const { changedLineNo } = indentListItemsUsecase.invoke('indent');
+    const { changedLineNo } = indentListItemsUsecase.invoke({ direction: 'indent' });
 
     expect(changedLineNo).toEqual([1]);
   });
@@ -77,7 +78,7 @@ describe('IndentListItemsUsecase', () => {
 
     setMock(page, lineNo);
 
-    const { changedLineNo } = indentListItemsUsecase.invoke('indent');
+    const { changedLineNo } = indentListItemsUsecase.invoke({ direction: 'indent' });
 
     expect(changedLineNo).toEqual([]);
   });
@@ -88,7 +89,7 @@ describe('IndentListItemsUsecase', () => {
 
     setMock(page, lineNo);
 
-    const { changedLineNo } = indentListItemsUsecase.invoke('indent');
+    const { changedLineNo } = indentListItemsUsecase.invoke({ direction: 'indent' });
 
     expect(changedLineNo).toEqual([1, 2, 3]);
   });
@@ -99,7 +100,7 @@ describe('IndentListItemsUsecase', () => {
 
     setMock(page, lineNo);
 
-    const { changedLineNo } = indentListItemsUsecase.invoke('outdent');
+    const { changedLineNo } = indentListItemsUsecase.invoke({ direction: 'outdent' });
 
     expect(changedLineNo).toEqual([1]);
   });
@@ -110,7 +111,7 @@ describe('IndentListItemsUsecase', () => {
 
     setMock(page, lineNo);
 
-    const { changedLineNo } = indentListItemsUsecase.invoke('outdent');
+    const { changedLineNo } = indentListItemsUsecase.invoke({ direction: 'outdent' });
 
     expect(changedLineNo).toEqual([]);
   });
@@ -121,7 +122,7 @@ describe('IndentListItemsUsecase', () => {
 
     setMock(page, lineNo);
 
-    const { changedLineNo } = indentListItemsUsecase.invoke('outdent');
+    const { changedLineNo } = indentListItemsUsecase.invoke({ direction: 'outdent' });
 
     expect(changedLineNo).toEqual([1, 2, 3]);
   });

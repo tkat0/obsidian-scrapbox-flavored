@@ -1,14 +1,30 @@
-import { App, Editor, EditorChange, VaultConfig } from 'obsidian';
-import type { ObsidianAdapter, ReadCurrentLineOutput } from 'src/domain/adapter/ObsidianAdapter';
+import { ChangeSpec, Line } from '@codemirror/state';
+import { EditorView } from '@codemirror/view';
+import { App, VaultConfig } from 'obsidian';
+import type { GetCursorOutput, ObsidianAdapter, ReadCurrentLineOutput } from 'src/domain/adapter/ObsidianAdapter';
 import { EXCLUDE_LIST_SECTIONS, IndentDirection, LineNo, LineRange, ListItem } from 'src/domain/model';
 
 export class ObsidianAdapterImpl implements ObsidianAdapter {
-  constructor(private app: App, private editor: Editor, private config: VaultConfig) {}
+  constructor(private app: App, private editor: EditorView, private config: VaultConfig) {}
+
+  getCursor(): GetCursorOutput {
+    const anchor = this.editor.state.selection.ranges[0].anchor;
+    const { from, number } = this.editor.state.doc.lineAt(anchor);
+    return {
+      offset: anchor - from,
+      line: number,
+      anchor,
+    };
+  }
+  private getCurrentLine(): Line {
+    const anchor = this.editor.state.selection.ranges[0].anchor;
+    return this.editor.state.doc.lineAt(anchor);
+  }
 
   canIndent(): boolean {
     const file = this.app.workspace.getActiveFile();
     const { sections } = this.app.metadataCache.getFileCache(file);
-    const { line } = this.editor.getCursor();
+    const { number: line } = this.getCurrentLine();
 
     if (sections) {
       for (const section of sections) {
@@ -25,68 +41,78 @@ export class ObsidianAdapterImpl implements ObsidianAdapter {
   }
 
   lineCount(): number {
-    return this.editor.lineCount();
+    return this.editor.state.doc.lines;
   }
 
   readCurrentLine(): ReadCurrentLineOutput {
-    const { line: lineNo } = this.editor.getCursor();
-    const text = this.editor.getLine(lineNo);
+    const { number: lineNo, text } = this.getCurrentLine();
     return {
       lineNo,
       text,
     };
   }
 
-  readLine(lineNo: LineNo | undefined): string | undefined {
-    if (lineNo < 0 || this.editor.lastLine() < lineNo) {
+  readLine(lineNo: LineNo): string | undefined {
+    if (lineNo < 0 || this.lineCount() < lineNo) {
       return;
     }
 
-    return this.editor.getLine(lineNo);
+    const { text } = this.editor.state.doc.line(lineNo);
+    return text;
   }
 
   move(a: LineRange, b: LineNo): void {
     const up = a.start > b;
     const { start, end } = a;
 
-    const cursor = this.editor.getCursor();
-    const srcLength = this.editor.getLine(end).length;
-    const text = this.editor.getRange({ line: start, ch: 0 }, { line: end, ch: srcLength });
+    const { from: cutFrom } = this.editor.state.doc.line(start);
+    const { to: cutTo } = this.editor.state.doc.line(end);
+    const text = this.editor.state.doc.sliceString(cutFrom, cutTo);
 
-    const changes: EditorChange[] = [];
-    // cut
+    const changes: ChangeSpec[] = [];
+    // cut a line
     changes.push({
-      from: { line: start, ch: 0 },
-      to: { line: end + 1, ch: 0 },
-      text: '',
+      from: cutFrom,
+      to: cutTo + 1,
+      insert: '',
     });
 
     // paste
-    const line = up ? b : b + 1;
+    const { from: dstFrom, to: dstTo } = this.editor.state.doc.line(b);
+    const pasteFrom = up ? dstFrom : dstTo + 1;
+    const insert = text + '\n';
     changes.push({
-      from: { line, ch: 0 },
-      text: text + '\n',
+      from: pasteFrom,
+      insert,
     });
 
-    this.editor.transaction({
+    const { offset } = this.getCursor();
+    const nextCursorLine = up ? b : a.start + (b - a.end);
+    this.editor.dispatch({
       changes,
     });
 
-    const nextCursor = up ? b : a.start + (b - a.end);
-    this.editor.setCursor({ line: nextCursor, ch: cursor.ch });
+    {
+      const { from } = this.editor.state.doc.line(nextCursorLine);
+      this.editor.dispatch({
+        selection: {
+          anchor: from + offset,
+        },
+      });
+    }
   }
 
   indent(items: ListItem[], direction: IndentDirection): void {
-    const cursor = this.editor.getCursor();
+    const cursor = this.getCursor();
 
     const change = direction == 'indent' ? 1 : -1;
     const { useTab, tabSize } = this.config;
     const indentChar = useTab ? '\t' : ' '.repeat(tabSize);
 
-    let ch: number | undefined = undefined;
-    const changes: EditorChange[] = [];
+    let offset: number | undefined = undefined;
+    const changes: ChangeSpec[] = [];
     items.forEach((item) => {
-      const line = this.editor.getLine(item.lineNo);
+      const { text: line, from, to } = this.editor.state.doc.line(item.lineNo);
       let text;
       if (item.level + change < 0) {
         text = `${item.text}`;
@@ -94,20 +120,23 @@ export class ObsidianAdapterImpl implements ObsidianAdapter {
         const space = indentChar.repeat(item.level + change);
         text = `${space}${item.prefix} ${item.text}`;
       }
-      if (ch == undefined) {
-        ch = text.length - line.length;
+      if (offset == undefined) {
+        offset = text.length - line.length;
       }
+
+      // replace the line with text applied indent
       changes.push({
-        from: { line: item.lineNo, ch: 0 },
-        to: { line: item.lineNo, ch: line.length },
-        text,
+        from,
+        to,
+        insert: text,
       });
     });
 
-    this.editor.transaction({
+    this.editor.dispatch({
       changes,
+      selection: {
+        anchor: cursor.anchor + offset,
+      },
     });
-
-    this.editor.setCursor({ line: cursor.line, ch: cursor.ch + ch });
   }
 }

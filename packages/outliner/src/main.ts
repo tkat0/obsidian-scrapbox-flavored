@@ -1,7 +1,9 @@
+import { Prec } from '@codemirror/state';
+import { EditorView, keymap } from '@codemirror/view';
 import { Plugin } from 'obsidian';
 
 import { ObsidianAdapterImpl } from './adapter/ObsidianAdapterImpl';
-import { IndentListItemsUsecase } from './domain/usecase/IndentListItemsUsecase';
+import { IndentListItemsUsecase, IndentListItemsUsecaseOutput } from './domain/usecase/IndentListItemsUsecase';
 import { ReadListBlockUsecase } from './domain/usecase/ReadListBlockUsecase';
 import { SwapListItemsUseacase } from './domain/usecase/SwapListItemsUsecase';
 import { moveCursorToBegin, moveCursorToEnd } from './features/listop';
@@ -15,6 +17,94 @@ export default class OutlinerPlugin extends Plugin {
 
   async onload() {
     const config = this.app.vault.config;
+
+    const move = (target: EditorView, direction: 'up' | 'down') => {
+      const obsidianAdapter = new ObsidianAdapterImpl(this.app, target, config);
+      const readListBlockUsecase = new ReadListBlockUsecase(obsidianAdapter);
+      const usecase = new SwapListItemsUseacase(obsidianAdapter, readListBlockUsecase);
+      usecase.invoke(direction);
+    };
+
+    const indent = (
+      target: EditorView,
+      direction: 'indent' | 'outdent',
+      condition: 'begin-of-line' | 'after-prefix' | undefined = undefined,
+    ): IndentListItemsUsecaseOutput => {
+      const obsidianAdapter = new ObsidianAdapterImpl(this.app, target, config);
+      const readListBlockUsecase = new ReadListBlockUsecase(obsidianAdapter);
+      const usecase = new IndentListItemsUsecase(obsidianAdapter, readListBlockUsecase);
+      return usecase.invoke({ direction, condition });
+    };
+
+    // register code mirror extensions triggerd by simple hotkeys
+    this.registerEditorExtension(
+      Prec.highest(
+        keymap.of([
+          {
+            key: 'Alt-ArrowUp',
+            run: (target) => {
+              move(target, 'up');
+              return true;
+            },
+          },
+          {
+            key: 'Alt-ArrowDown',
+            run: (target) => {
+              move(target, 'down');
+              return true;
+            },
+          },
+          {
+            key: 'Alt-ArrowRight',
+            run: (target) => {
+              return indent(target, 'indent').isList;
+            },
+          },
+          {
+            key: 'Alt-ArrowLeft',
+            run: (target) => {
+              return indent(target, 'outdent').isList;
+            },
+          },
+          {
+            key: 'Tab',
+            run: (target) => {
+              return indent(target, 'indent').isList;
+            },
+          },
+          {
+            key: 'Shift-Tab',
+            run: (target) => {
+              return indent(target, 'outdent').isList;
+            },
+          },
+          {
+            key: 'Space',
+            run: (target) => {
+              // allow to indent by space key only when a line is empty
+              const { changedLineNo } = indent(target, 'indent', 'begin-of-line');
+              if (changedLineNo.length > 0) {
+                return true;
+              } else {
+                return false; // allow default behavior
+              }
+            },
+          },
+          {
+            key: 'Backspace',
+            run: (target) => {
+              // allow to outdent by backspace key only when the cursor is next to a list prefix
+              const { changedLineNo } = indent(target, 'outdent', 'after-prefix');
+              if (changedLineNo.length > 0) {
+                return true;
+              } else {
+                return false; // allow default behavior
+              }
+            },
+          },
+        ]),
+      ),
+    );
 
     this.addCommand({
       id: 'move-cursor-beginning-of-line',
@@ -34,66 +124,6 @@ export default class OutlinerPlugin extends Plugin {
         moveCursorToEnd(editor);
       },
       hotkeys: [{ modifiers: ['Ctrl'], key: 'e' }],
-    });
-
-    this.addCommand({
-      id: 'move-up-current-block-of-list',
-      name: 'Move up the current block of the list',
-      repeatable: true,
-      editorCallback: (editor, _markdown) => {
-        const obsidianAdapter = new ObsidianAdapterImpl(this.app, editor, config);
-        const readListBlockUsecase = new ReadListBlockUsecase(obsidianAdapter);
-        const usecase = new SwapListItemsUseacase(obsidianAdapter, readListBlockUsecase);
-        usecase.invoke('up');
-      },
-      hotkeys: [{ modifiers: ['Alt'], key: 'ArrowUp' }],
-    });
-
-    this.addCommand({
-      id: 'move-down-current-block-of-list',
-      name: 'Move down the current block of the list',
-      repeatable: true,
-      editorCallback: (editor, _markdown) => {
-        const obsidianAdapter = new ObsidianAdapterImpl(this.app, editor, config);
-        const readListBlockUsecase = new ReadListBlockUsecase(obsidianAdapter);
-        const usecase = new SwapListItemsUseacase(obsidianAdapter, readListBlockUsecase);
-        usecase.invoke('down');
-      },
-      hotkeys: [{ modifiers: ['Alt'], key: 'ArrowDown' }],
-    });
-
-    this.addCommand({
-      id: 'indent-selected-block-of-list',
-      name: 'Indent the selected block of the list',
-      repeatable: true,
-      editorCallback: (editor, _markdown) => {
-        const obsidianAdapter = new ObsidianAdapterImpl(this.app, editor, config);
-        const readListBlockUsecase = new ReadListBlockUsecase(obsidianAdapter);
-        const usecase = new IndentListItemsUsecase(obsidianAdapter, readListBlockUsecase);
-        usecase.invoke('indent');
-      },
-      hotkeys: [
-        { modifiers: ['Alt'], key: 'ArrowRight' },
-        { modifiers: [], key: 'Tab' },
-        // { modifiers: [], key: 'Space' },
-      ],
-    });
-
-    this.addCommand({
-      id: 'outdent-selected-block-of-list',
-      name: 'Outndent the selected block of the list',
-      repeatable: true,
-      editorCallback: (editor, _markdown) => {
-        const obsidianAdapter = new ObsidianAdapterImpl(this.app, editor, config);
-        const readListBlockUsecase = new ReadListBlockUsecase(obsidianAdapter);
-        const usecase = new IndentListItemsUsecase(obsidianAdapter, readListBlockUsecase);
-        usecase.invoke('outdent');
-      },
-      hotkeys: [
-        { modifiers: ['Alt'], key: 'ArrowLeft' },
-        { modifiers: ['Shift'], key: 'Tab' },
-        // { modifiers: [], key: 'Backspace' },
-      ],
     });
   }
 }

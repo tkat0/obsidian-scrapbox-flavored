@@ -31,10 +31,12 @@ Provide an effective list operations
 
 This feature is disabled in default. Enable it in the setting.
 
+The hotkeys can not be changed now.
+
 <table>
 <thead>
 <tr>
-<th>Command (default hotkey)</th>
+<th>Command (hotkey)</th>
 <th></th>
 </tr>
 </thead>
@@ -44,7 +46,6 @@ This feature is disabled in default. Enable it in the setting.
 <td>
 <li><b>Create a list</b> (<kbd>Tab</kbd> or <kbd>Space</kbd>)</li>
 <li><b>Delete a list</b> (<kbd>Shift</kbd> + <kbd>Tab</kbd> or <kbd>Backspace</kbd>)</li>
-*) These are not commands. The hotkey can not be changed now.
 </td>
 <td>
 <img src="./packages/outliner/docs/create-delete.gif" width="400px" />

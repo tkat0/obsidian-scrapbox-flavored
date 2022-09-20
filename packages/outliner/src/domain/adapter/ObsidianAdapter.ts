@@ -5,6 +5,7 @@ export interface ObsidianAdapter {
   lineCount(): number;
   readLine(lineNo: LineNo): string | undefined;
   readCurrentLine(): ReadCurrentLineOutput;
+  getCursor(): GetCursorOutput;
   move(a: LineRange, b: LineNo): void;
   indent(items: ListItem[], direction: IndentDirection): void;
 }
@@ -17,4 +18,10 @@ export interface ReadCurrentLineOutput {
 export interface ReadListBlockOutput {
   block?: ListBlock;
   currentIndex?: number;
+}
+
+export interface GetCursorOutput {
+  offset: number;
+  line: number;
+  anchor: number;
 }

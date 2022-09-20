@@ -25,7 +25,7 @@ export const EXCLUDE_LIST_SECTIONS = ['code', 'table', 'heading'];
  * matches line as follows.
  *  " - ", " * ", " 1. "
  */
-const REGEX_MARKDOWN_LIST = /(?<indent>[\s]*)([-*]|\d+\.)\s+/;
+const REGEX_MARKDOWN_LIST = /(?<indent>[\s]*)([-*]|\d+\.)\s/;
 
 // even if it's same looks, the return value is different depends on it's tab or space.
 // e.g 1 tab => 1, 4 space => 4
@@ -49,11 +49,18 @@ export const getListInfo = (text: string): GetListInfoOutput => {
 export const calcLevel = (items: ListItem[]) => {
   let currentLevel = 0;
   let indent = '';
+  // use first level1 indent as a unit
+  let unit: string | undefined = undefined;
   items.map((item) => {
-    if (item.indent.length > indent.length) {
+    if (item.indent.length == 0) {
+      currentLevel = 0;
+    } else if (item.indent.length > indent.length) {
       currentLevel += 1;
+      if (currentLevel == 1) {
+        unit = item.indent;
+      }
     } else if (item.indent.length < indent.length) {
-      currentLevel -= 1;
+      currentLevel = Math.trunc(item.indent.length / unit.length);
     }
     indent = item.indent;
     item.level = currentLevel;
@@ -129,4 +136,11 @@ export const getNextListItem = (items: ListItem[], index: number, direction: 'up
   } else {
     return nextIndex;
   }
+};
+
+export const isCursorNextToPrefix = (text: string, cursor: number) => {
+  // "   - hoge"
+  //       ^ cursor is here
+  const prefix = text.match(REGEX_MARKDOWN_LIST);
+  return prefix !== null && cursor == prefix[0].length;
 };

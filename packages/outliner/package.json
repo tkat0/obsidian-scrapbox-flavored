@@ -13,6 +13,8 @@
   "license": "MIT",
   "repository": "https://github.com/tkat0/obsidian-scrapbox-flavored",
   "devDependencies": {
+    "@codemirror/state": "^6.1.1",
+    "@codemirror/view": "^6.2.4",
     "@types/node": "16.11.6",
     "@typescript-eslint/eslint-plugin": "5.2.0",
     "@typescript-eslint/parser": "5.2.0",
