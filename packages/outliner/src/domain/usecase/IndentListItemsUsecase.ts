@@ -6,7 +6,7 @@ export class IndentListItemsUsecase {
   constructor(private adapter: ObsidianAdapter, private readListBlockUsecase: ReadListBlockUsecase) {}
 
   invoke(input: IndentListItemsUsecaseInput): IndentListItemsUsecaseOutput {
-    const { direction, condition } = input;
+    const { direction, condition, skipChildren } = input;
     if (!this.adapter.canIndent()) {
       return { changedLineNo: [], isList: false };
     }
@@ -55,8 +55,8 @@ export class IndentListItemsUsecase {
       }
     }
 
-    const items = getChildren(block.items, currentIndex);
-    const target = [current, ...items];
+    const children = skipChildren == true ? [] : getChildren(block.items, currentIndex);
+    const target = [current, ...children];
 
     this.adapter.indent(target, direction);
     return { changedLineNo: target.map((item) => item.lineNo), isList: true };
@@ -66,6 +66,7 @@ export class IndentListItemsUsecase {
 export interface IndentListItemsUsecaseInput {
   direction: IndentDirection;
   condition?: 'begin-of-line' | 'after-prefix';
+  skipChildren?: boolean;
 }
 
 export interface IndentListItemsUsecaseOutput {

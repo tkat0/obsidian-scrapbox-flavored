@@ -40,7 +40,7 @@ export class ReadListBlockUsecase {
       indent,
     });
 
-    for (let i = lineNo + 1; i < this.adapter.lineCount(); i++) {
+    for (let i = lineNo + 1; i <= this.adapter.lineCount(); i++) {
       const text = this.adapter.readLine(i);
       const { isList, prefix, indent, content } = getListInfo(text);
       if (!isList) {
