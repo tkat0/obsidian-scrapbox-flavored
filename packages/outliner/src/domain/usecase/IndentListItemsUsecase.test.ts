@@ -15,8 +15,8 @@ describe('IndentListItemsUsecase', () => {
   });
 
   const setMock = (page: string[], lineNo: number) => {
-    obsidian.readCurrentLine.mockReturnValue({ lineNo, text: page[lineNo] });
-    obsidian.readLine.mockImplementation((lineNo) => page[lineNo]);
+    obsidian.readCurrentLine.mockReturnValue({ lineNo, text: page[lineNo - 1] });
+    obsidian.readLine.mockImplementation((lineNo) => page[lineNo - 1]);
     obsidian.lineCount.mockReturnValue(page.length);
     obsidian.canIndent.mockReturnValue(true);
     obsidian.getCursor.mockReturnValue({ offset: 0, line: 0, anchor: 0 });
@@ -24,18 +24,18 @@ describe('IndentListItemsUsecase', () => {
 
   it(`should indent with no list item`, async () => {
     const page = ['0', '- 1', '- 2'];
-    const lineNo = 0;
+    const lineNo = 1;
 
     setMock(page, lineNo);
 
     const { changedLineNo } = indentListItemsUsecase.invoke({ direction: 'indent' });
 
-    expect(changedLineNo).toEqual([0]);
+    expect(changedLineNo).toEqual([1]);
   });
 
   it(`should not indent the first item`, async () => {
     const page = ['- 0', '- 1', '- 2'];
-    const lineNo = 0;
+    const lineNo = 1;
 
     setMock(page, lineNo);
 
@@ -46,7 +46,7 @@ describe('IndentListItemsUsecase', () => {
 
   it(`should indent and unindent on several sections`, async () => {
     const page = ['```', 'inside code block', '```'];
-    const lineNo = 1;
+    const lineNo = 2;
 
     setMock(page, lineNo);
     obsidian.canIndent.mockReturnValue(false);
@@ -63,18 +63,18 @@ describe('IndentListItemsUsecase', () => {
 
   it(`should indent`, async () => {
     const page = ['- 0', '- 1', '- 2'];
-    const lineNo = 1;
+    const lineNo = 2;
 
     setMock(page, lineNo);
 
     const { changedLineNo } = indentListItemsUsecase.invoke({ direction: 'indent' });
 
-    expect(changedLineNo).toEqual([1]);
+    expect(changedLineNo).toEqual([2]);
   });
 
   it(`should not indent deeper`, async () => {
     const page = ['- 0', '  - 1', '- 2'];
-    const lineNo = 1;
+    const lineNo = 2;
 
     setMock(page, lineNo);
 
@@ -85,29 +85,29 @@ describe('IndentListItemsUsecase', () => {
 
   it(`should indent with children`, async () => {
     const page = ['- 0', '- 1', '  - 2', '  - 3'];
-    const lineNo = 1;
+    const lineNo = 2;
 
     setMock(page, lineNo);
 
     const { changedLineNo } = indentListItemsUsecase.invoke({ direction: 'indent' });
 
-    expect(changedLineNo).toEqual([1, 2, 3]);
+    expect(changedLineNo).toEqual([2, 3, 4]);
   });
 
   it(`should outdent`, async () => {
     const page = ['- 0', '  - 1', '- 2'];
-    const lineNo = 1;
+    const lineNo = 2;
 
     setMock(page, lineNo);
 
     const { changedLineNo } = indentListItemsUsecase.invoke({ direction: 'outdent' });
 
-    expect(changedLineNo).toEqual([1]);
+    expect(changedLineNo).toEqual([2]);
   });
 
   it(`should not outdent no list item`, async () => {
     const page = ['- 0', '1', '- 2'];
-    const lineNo = 1;
+    const lineNo = 2;
 
     setMock(page, lineNo);
 
@@ -118,12 +118,12 @@ describe('IndentListItemsUsecase', () => {
 
   it(`should outdent with children`, async () => {
     const page = ['- 0', '  - 1', '    - 2', '    - 3'];
-    const lineNo = 1;
+    const lineNo = 2;
 
     setMock(page, lineNo);
 
     const { changedLineNo } = indentListItemsUsecase.invoke({ direction: 'outdent' });
 
-    expect(changedLineNo).toEqual([1, 2, 3]);
+    expect(changedLineNo).toEqual([2, 3, 4]);
   });
 });

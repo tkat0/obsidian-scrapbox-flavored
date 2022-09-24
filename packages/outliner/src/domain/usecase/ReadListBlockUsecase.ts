@@ -15,7 +15,7 @@ export class ReadListBlockUsecase {
 
     const items: ListItem[] = [];
 
-    for (let i = lineNo - 1; i >= 0; i--) {
+    for (let i = lineNo - 1; i >= 1; i--) {
       const text = this.adapter.readLine(i);
       const { isList, prefix, indent, content } = getListInfo(text);
       if (!isList) {
