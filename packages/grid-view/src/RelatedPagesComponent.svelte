@@ -76,7 +76,7 @@
   }
 </script>
 
-<div class="pb-16 w-full">
+<div class="w-full pb-16">
   {#if hasCard}
     <SortMenu sort={settings.relatedPages.sort} {onSortClick} />
   {/if}
