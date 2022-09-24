@@ -108,7 +108,7 @@ See [TfTHacker/obsidian42-brat: BRAT - Beta Reviewer's Auto-update Tool for Obsi
 ### Build manually
 -   Download this repository
 -   Run `pnpm install && pnpm run build`
--   Copy over `./packages/plugin/{main.js, manifest.json}` to your vault `VaultFolder/.obsidian/plugins/obsidian-scrapbox-flavored`
+-   Copy over `./packages/plugin/{main.js, manifest.json, styles.css}` to your vault `VaultFolder/.obsidian/plugins/obsidian-scrapbox-flavored`
 -   Enable this plugin in the Obsidian configuration.
 
 ## Roadmap
@@ -119,7 +119,6 @@ These features will be implemented.
     - import Scrapbox pages to Obsidian
     - export Obsidian pages to Scrapbox
 - code block in Markdown list like https://scrapbox.io/help/Syntax#58348ae2651ee500008d67df
-- related page list on each page like https://scrapbox.io/help/Related_pages
 
 ## Related projects
 
