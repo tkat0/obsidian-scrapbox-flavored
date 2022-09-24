@@ -155,6 +155,7 @@
   <SortMenu {sort} {onSortClick} />
   <!-- card grid -->
   <div class="flex justify-center">
+    <!-- TODO: svelte inserts <iframe> via bind:clientWidth and it is visible on Windows.  -->
     <div class="flex max-h-full w-[90%] flex-wrap gap-[16px] overflow-x-scroll pl-[16px]" bind:clientWidth={gridWidth}>
       {#each cards as card, i}
         <div bind:this={cardRef[i]}>

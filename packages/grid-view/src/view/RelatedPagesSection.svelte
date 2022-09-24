@@ -23,6 +23,7 @@
 
 {#if cards.length > 0}
   <div class="flex justify-center p-2">
+    <!-- TODO: svelte inserts <iframe> via bind:clientWidth and it is visible on Windows.  -->
     <div class="flex max-h-full w-[90%] flex-wrap gap-[16px] overflow-x-scroll pl-[16px]" bind:clientWidth={gridWidth}>
       <LinkCard {title} {width} />
       {#each cards as card}
