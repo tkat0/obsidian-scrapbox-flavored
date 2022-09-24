@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@obsidian-scrapbox-flavored/grid-view": "workspace:*",
-    "@obsidian-scrapbox-flavored/outliner": "workspace:*"
+    "@obsidian-scrapbox-flavored/outliner": "workspace:*",
+    "@obsidian-scrapbox-flavored/styles": "workspace:*"
   }
 }

@@ -11,12 +11,14 @@ export interface ScrapboxFlavoredPluginSettings {
   gridView: GridViewSettings;
   outliner: OutlinerSettings;
   enableOutliner: boolean;
+  enableStyles: boolean;
 }
 
 export const DEFAULT_SETTINGS: ScrapboxFlavoredPluginSettings = {
   gridView: GRID_VIEW_DEFAULT_SETTINGS,
   outliner: OUTLINER_DEFAULT_SETTINGS,
   enableOutliner: false,
+  enableStyles: false,
 };
 
 export class ScrapboxFlavoredPluginSettingTab extends PluginSettingTab {
@@ -37,10 +39,24 @@ export class ScrapboxFlavoredPluginSettingTab extends PluginSettingTab {
 
     new Setting(containerEl)
       .setName('enable')
-      .setDesc('enable experimental feature')
+      .setDesc('[experimental] enable scrapbox flavored outline processing.Please restart Obsidian after the change.')
       .addToggle((toggle) => {
         toggle.setValue(this.plugin.settings.enableOutliner).onChange(async (value) => {
           this.plugin.settings.enableOutliner = value;
+          await this.plugin.saveSettings();
+        });
+      });
+
+    new Setting(containerEl).setName('Styles').setHeading();
+
+    new Setting(containerEl)
+      .setName('enable')
+      .setDesc(
+        '[experimental] enable rendering quate in list (e.g. "- >abc"). Please restart Obsidian after the change.',
+      )
+      .addToggle((toggle) => {
+        toggle.setValue(this.plugin.settings.enableStyles).onChange(async (value) => {
+          this.plugin.settings.enableStyles = value;
           await this.plugin.saveSettings();
         });
       });

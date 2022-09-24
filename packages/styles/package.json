@@ -1,0 +1,31 @@
+{
+  "name": "@obsidian-scrapbox-flavored/styles",
+  "version": "0.1.0",
+  "description": "Scrapbox-flavored styles plugin for Obsidian",
+  "main": "./dist/main.js",
+  "scripts": {
+    "dev": "node esbuild.config.mjs",
+    "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
+    "test": "vitest run --reporter verbose"
+  },
+  "keywords": [],
+  "author": "tkat0",
+  "license": "MIT",
+  "repository": "https://github.com/tkat0/obsidian-scrapbox-flavored",
+  "devDependencies": {
+    "@codemirror/state": "^6.1.1",
+    "@codemirror/language": "^6.2.1",
+    "@codemirror/view": "^6.2.4",
+    "@types/node": "16.11.6",
+    "@typescript-eslint/eslint-plugin": "5.2.0",
+    "@typescript-eslint/parser": "5.2.0",
+    "builtin-modules": "3.2.0",
+    "esbuild": "0.13.12",
+    "obsidian": "0.16.0",
+    "tslib": "2.3.1",
+    "typescript": "4.8.3",
+    "vite": "^3.1.0",
+    "vitest": "^0.23.2",
+    "vitest-mock-extended": "^0.1.15"
+  }
+}

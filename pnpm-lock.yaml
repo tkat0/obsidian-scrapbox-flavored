@@ -120,6 +120,7 @@ importers:
     specifiers:
       '@obsidian-scrapbox-flavored/grid-view': workspace:*
       '@obsidian-scrapbox-flavored/outliner': workspace:*
+      '@obsidian-scrapbox-flavored/styles': workspace:*
       babel-loader: ^8.2.5
       builtin-modules: 3.2.0
       esbuild: 0.13.12
@@ -129,6 +130,7 @@ importers:
     dependencies:
       '@obsidian-scrapbox-flavored/grid-view': link:../grid-view
       '@obsidian-scrapbox-flavored/outliner': link:../outliner
+      '@obsidian-scrapbox-flavored/styles': link:../styles
     devDependencies:
       babel-loader: 8.2.5
       builtin-modules: 3.2.0
@@ -136,6 +138,38 @@ importers:
       obsidian: 0.16.0
       tslib: 2.3.1
       typescript: 4.8.3
+
+  packages/styles:
+    specifiers:
+      '@codemirror/language': ^6.2.1
+      '@codemirror/state': ^6.1.1
+      '@codemirror/view': ^6.2.4
+      '@types/node': 16.11.6
+      '@typescript-eslint/eslint-plugin': 5.2.0
+      '@typescript-eslint/parser': 5.2.0
+      builtin-modules: 3.2.0
+      esbuild: 0.13.12
+      obsidian: 0.16.0
+      tslib: 2.3.1
+      typescript: 4.8.3
+      vite: ^3.1.0
+      vitest: ^0.23.2
+      vitest-mock-extended: ^0.1.15
+    devDependencies:
+      '@codemirror/language': 6.2.1
+      '@codemirror/state': 6.1.1
+      '@codemirror/view': 6.2.4
+      '@types/node': 16.11.6
+      '@typescript-eslint/eslint-plugin': 5.2.0_3ii3if7kapxx2yul45pyv7aiga
+      '@typescript-eslint/parser': 5.2.0_typescript@4.8.3
+      builtin-modules: 3.2.0
+      esbuild: 0.13.12
+      obsidian: 0.16.0_i7qyacltc5yis7vfg7tlbipfum
+      tslib: 2.3.1
+      typescript: 4.8.3
+      vite: 3.1.0
+      vitest: 0.23.2
+      vitest-mock-extended: 0.1.15_ky3xg2nj6gyc5kpshvf3gpk4uq
 
 packages:
 
@@ -419,6 +453,17 @@ packages:
       to-fast-properties: 2.0.0
     dev: true
 
+  /@codemirror/language/6.2.1:
+    resolution: {integrity: sha512-MC3svxuvIj0MRpFlGHxLS6vPyIdbTr2KKPEW46kCoCXw2ktb4NTkpkPBI/lSP/FoNXLCBJ0mrnUi1OoZxtpW1Q==}
+    dependencies:
+      '@codemirror/state': 6.1.1
+      '@codemirror/view': 6.2.4
+      '@lezer/common': 1.0.1
+      '@lezer/highlight': 1.1.1
+      '@lezer/lr': 1.2.3
+      style-mod: 4.0.0
+    dev: true
+
   /@codemirror/state/6.1.1:
     resolution: {integrity: sha512-2s+aXsxmAwnR3Rd+JDHPG/1lw0YsA9PEwl7Re88gHJHGfxyfEzKBmsN4rr53RyPIR4lzbbhJX0DCq0WlqlBIRw==}
     dev: true
@@ -517,6 +562,22 @@ packages:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.0
       '@jridgewell/sourcemap-codec': 1.4.14
+    dev: true
+
+  /@lezer/common/1.0.1:
+    resolution: {integrity: sha512-8TR5++Q/F//tpDsLd5zkrvEX5xxeemafEaek7mUp7Y+bI8cKQXdSqhzTOBaOogETcMOVr0pT3BBPXp13477ciw==}
+    dev: true
+
+  /@lezer/highlight/1.1.1:
+    resolution: {integrity: sha512-duv9D23O9ghEDnnUDmxu+L8pJy4nYo4AbCOHIudUhscrLSazqeJeK1V50EU6ZufWF1zv0KJwu/frFRyZWXxHBQ==}
+    dependencies:
+      '@lezer/common': 1.0.1
+    dev: true
+
+  /@lezer/lr/1.2.3:
+    resolution: {integrity: sha512-qpB7rBzH8f6Mzjv2AVZRahcm+2Cf7nbIH++uXbvVOL1yIRvVWQ3HAM/saeBLCyz/togB7LGo76qdJYL1uKQlqA==}
+    dependencies:
+      '@lezer/common': 1.0.1
     dev: true
 
   /@nodelib/fs.scandir/2.1.5:
