@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "node esbuild.config.mjs",
     "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
-    "test": "vitest run --reporter verbose"
+    "test": ""
   },
   "keywords": [],
   "author": "tkat0",
