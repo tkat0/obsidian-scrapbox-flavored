@@ -25,6 +25,12 @@ Grid View provides several features.
 - Pin starred files (Enable `Starred` Core plugin to use this)
 - Context menu to delete a file or toggle star
 
+### Related Pages
+
+Show cards related to the current page at the bottom of the page
+
+<img src="./packages/grid-view/docs/related-pages.png" width="600px" />
+
 ### Outliner
 
 Provide an effective list operations

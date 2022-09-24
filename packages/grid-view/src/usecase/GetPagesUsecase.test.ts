@@ -12,7 +12,7 @@ describe('GetPagesUsecaseImpl', () => {
 
   beforeEach(async () => {
     wasmAdapter.getSummarizedDescription.mockReturnValue([[]]);
-    obsidianAdapter.getMetadata.mockReturnValue({ links: 0, tags: [] });
+    obsidianAdapter.getMetadata.mockReturnValue({ resolvedLinks: [], unresolvedLinks: [], tags: [] });
     obsidianAdapter.cachedRead.mockResolvedValue('');
     obsidianAdapter.getMarkdownFiles.mockReturnValue([
       {
@@ -40,130 +40,6 @@ describe('GetPagesUsecaseImpl', () => {
     ]);
 
     getPageUsecase = await GetPagesUsecaseImpl.init(obsidianAdapter, wasmAdapter);
-  });
-
-  it('should sort by file-name-a-to-z', async () => {
-    const { cards } = await getPageUsecase.invoke({
-      page: 0,
-      size: 10,
-      pinStarred: true,
-      search: '',
-      sort: 'file-name-a-to-z',
-    });
-
-    expect(cards.map((card) => card.title)).toEqual(['a', 'b']);
-  });
-
-  it('should sort by file-name-z-to-a', async () => {
-    const { cards } = await getPageUsecase.invoke({
-      page: 0,
-      size: 10,
-      pinStarred: true,
-      search: '',
-      sort: 'file-name-z-to-a',
-    });
-
-    expect(cards.map((card) => card.title)).toEqual(['b', 'a']);
-  });
-
-  it('should sort by created-new-to-old', async () => {
-    const { cards } = await getPageUsecase.invoke({
-      page: 0,
-      size: 10,
-      pinStarred: true,
-      search: '',
-      sort: 'created-new-to-old',
-    });
-
-    expect(cards.map((card) => card.title)).toEqual(['b', 'a']);
-  });
-
-  it('should sort by created-old-to-new', async () => {
-    const { cards } = await getPageUsecase.invoke({
-      page: 0,
-      size: 10,
-      pinStarred: true,
-      search: '',
-      sort: 'created-old-to-new',
-    });
-
-    expect(cards.map((card) => card.title)).toEqual(['a', 'b']);
-  });
-
-  it('should sort by modified-new-to-old', async () => {
-    const { cards } = await getPageUsecase.invoke({
-      page: 0,
-      size: 10,
-      pinStarred: true,
-      search: '',
-      sort: 'modified-new-to-old',
-    });
-
-    expect(cards.map((card) => card.title)).toEqual(['a', 'b']);
-  });
-
-  it('should sort by modified-old-to-new', async () => {
-    const { cards } = await getPageUsecase.invoke({
-      page: 0,
-      size: 10,
-      pinStarred: true,
-      search: '',
-      sort: 'modified-old-to-new',
-    });
-
-    expect(cards.map((card) => card.title)).toEqual(['b', 'a']);
-  });
-
-  it(`should sort by most-linked`, async () => {
-    obsidianAdapter.getMetadata.mockImplementation((file) => {
-      if (file.basename == 'a') {
-        return {
-          links: 10,
-          tags: [],
-        };
-      } else {
-        return {
-          links: 0,
-          tags: [],
-        };
-      }
-    });
-
-    const { cards } = await getPageUsecase.invoke({
-      page: 0,
-      size: 10,
-      pinStarred: true,
-      search: '',
-      sort: 'most-linked',
-    });
-
-    expect(cards.map((card) => card.title)).toEqual(['a', 'b']);
-  });
-
-  it(`should sort by least-linked`, async () => {
-    obsidianAdapter.getMetadata.mockImplementation((file) => {
-      if (file.basename == 'a') {
-        return {
-          links: 10,
-          tags: [],
-        };
-      } else {
-        return {
-          links: 0,
-          tags: [],
-        };
-      }
-    });
-
-    const { cards } = await getPageUsecase.invoke({
-      page: 0,
-      size: 10,
-      pinStarred: true,
-      search: '',
-      sort: 'least-linked',
-    });
-
-    expect(cards.map((card) => card.title)).toEqual(['b', 'a']);
   });
 
   it(`should return hasMore as true when it has more pages`, async () => {
@@ -224,12 +100,14 @@ describe('GetPagesUsecaseImpl', () => {
     obsidianAdapter.getMetadata.mockImplementation((file) => {
       if (file.basename == 'a') {
         return {
-          links: 0,
+          resolvedLinks: [],
+          unresolvedLinks: [],
           tags: ['tag'],
         };
       } else {
         return {
-          links: 0,
+          resolvedLinks: [],
+          unresolvedLinks: [],
           tags: [],
         };
       }

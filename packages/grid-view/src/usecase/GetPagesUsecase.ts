@@ -2,9 +2,8 @@ import type { WasmAdapter } from 'src/domain/adapter/WasmAdapter';
 import type { GetPagesUsecase, GetPagesUsecaseInput, GetPagesUsecaseOutput } from 'src/domain/usecase/GetPagesUsecase';
 
 import type { File, ObsidianAdapter } from '../domain/adapter/ObsidianAdapter';
+import { YAMLFrontMatter, createSortFn } from '../domain/model';
 import type { ICard } from '../domain/model';
-
-const YAMLFrontMatter = /^(-{3}(?:\n|\r)([\w\W]+?)(?:\n|\r)-{3}\n)/;
 
 export class GetPagesUsecaseImpl implements GetPagesUsecase {
   private constructor(private obsidianAdapter: ObsidianAdapter, private wasmAdapter: WasmAdapter) {}
@@ -18,6 +17,8 @@ export class GetPagesUsecaseImpl implements GetPagesUsecase {
     const { page, size, search, sort, pinStarred } = input;
 
     // console.debug(`GetPage: ${size * page} - ${size * (page + 1)}`, input);
+
+    const sortFn = createSortFn(pinStarred, sort);
 
     const starredPathes = this.obsidianAdapter.pluginEnabled('starred')
       ? this.obsidianAdapter.getStarredFile().map((f) => {
@@ -54,38 +55,7 @@ export class GetPagesUsecaseImpl implements GetPagesUsecase {
           return true;
         }
       })
-      .sort((a, b) => {
-        // 1. sorted by star
-        // file with star is always first
-        if (pinStarred) {
-          if (a.star && !b.star) {
-            return -1;
-          } else if (!a.star && b.star) {
-            return 1;
-          }
-        }
-        // 2. sorted by date
-        const al = a.meta.links;
-        const bl = b.meta.links;
-        switch (sort) {
-          case 'file-name-a-to-z':
-            return a.file.name.localeCompare(b.file.name);
-          case 'file-name-z-to-a':
-            return b.file.name.localeCompare(a.file.name);
-          case 'created-new-to-old':
-            return b.file.stat.ctime - a.file.stat.ctime;
-          case 'created-old-to-new':
-            return a.file.stat.ctime - b.file.stat.ctime;
-          case 'modified-new-to-old':
-            return b.file.stat.mtime - a.file.stat.mtime;
-          case 'modified-old-to-new':
-            return a.file.stat.mtime - b.file.stat.mtime;
-          case 'most-linked':
-            return bl - al;
-          case 'least-linked':
-            return al - bl;
-        }
-      });
+      .sort(sortFn);
 
     const cards = await Promise.all(iter.slice(size * page, size * (page + 1)).map(this.createCard));
 

@@ -1,8 +1,10 @@
 export interface ObsidianAdapter {
   getMetadata(file: File): Metadata;
+  getActiveFile(): File;
   getMarkdownFiles(): File[];
   cachedRead(file: File): Promise<string>;
   openFile(file: File): Promise<void>;
+  createFile(path: string): Promise<File>;
   trash(file: File, system: boolean): Promise<void>;
   pluginEnabled(name: InternalPlugin): boolean;
   getStarredFile(): File[];
@@ -32,7 +34,8 @@ export interface SearchResult {
 }
 
 export interface Metadata {
-  links: number;
+  resolvedLinks: File[];
+  unresolvedLinks: string[];
   tags: string[];
 }
 

@@ -1,11 +1,23 @@
-import type { SortKind } from './domain/usecase/GetPagesUsecase';
+import type { SortKind } from './domain/model';
 
 export interface GridViewSettings {
-  sort: SortKind;
-  pinStarred: boolean;
+  gridView: {
+    sort: SortKind;
+    pinStarred: boolean;
+  };
+  relatedPages: {
+    sort: SortKind;
+    pinStarred: boolean;
+  };
 }
 
 export const DEFAULT_SETTINGS: GridViewSettings = {
-  sort: 'modified-new-to-old',
-  pinStarred: true,
+  gridView: {
+    sort: 'modified-new-to-old',
+    pinStarred: true,
+  },
+  relatedPages: {
+    sort: 'modified-new-to-old',
+    pinStarred: true,
+  },
 };

@@ -1,18 +1,14 @@
 <script lang="ts">
-  import { getContext, onMount } from 'svelte';
-
-  import { ObsidianContextKey } from '../context';
-  import type { ObsidianContext } from '../context';
+  import { setIcon } from 'obsidian';
+  import { onMount } from 'svelte';
 
   export let iconId: string;
   export let size: number | undefined = undefined;
 
-  const ctx = getContext<ObsidianContext>(ObsidianContextKey);
-
   let ref: HTMLElement;
 
   onMount(() => {
-    ctx.obsidian.setIcon(ref, iconId, size);
+    setIcon(ref, iconId, size);
   });
 </script>
 

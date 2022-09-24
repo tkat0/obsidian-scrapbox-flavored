@@ -10,8 +10,7 @@ node_modules
 
 # Don't include the compiled main.js file in the repo.
 # They should be uploaded to GitHub releases instead.
-# TODO(tkat0): include untill release
-# main.js
+main.js
 
 # Exclude sourcemaps
 *.map
@@ -26,6 +25,3 @@ target/
 dist/
 
 *.log
-
-main.css
-main.js

@@ -1,10 +1,8 @@
 <script lang="ts" context="module">
   import { Menu } from 'obsidian';
-  import { getSortTitle } from 'src/domain/usecase/GetPagesUsecase';
-  import type { SortKind } from 'src/domain/usecase/GetPagesUsecase';
 
   import type { ObsidianContext } from '../context';
-  import type { ICard } from '../domain/model';
+  import { type ICard, type SortKind, getSortTitle } from '../domain/model';
 
   export interface OpenCardMenuInput {
     event: MouseEvent;
@@ -24,7 +22,7 @@
             .setSection('action')
             .setIcon('crossed-star')
             .onClick(() => {
-              card.toggleStar();
+              card.toggleStar?.();
             });
         });
       } else {
@@ -34,7 +32,7 @@
             .setSection('action')
             .setIcon('star')
             .onClick(() => {
-              card.toggleStar();
+              card.toggleStar?.();
             });
         });
       }
@@ -46,7 +44,7 @@
         .setIcon('trash')
         .setSection('danger')
         .onClick(() => {
-          card.trash();
+          card.trash?.();
         });
       (item as any).dom.addClass('is-warning');
     });

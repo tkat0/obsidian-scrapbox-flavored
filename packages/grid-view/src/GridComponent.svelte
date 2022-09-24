@@ -7,13 +7,12 @@
   import type { ObsidianContext } from './context';
   import type { ObsidianAdapter } from './domain/adapter/ObsidianAdapter.js';
   import type { ICard } from './domain/model.js';
-  import { getSortTitle } from './domain/usecase/GetPagesUsecase';
   import type { GetPagesUsecase } from './domain/usecase/GetPagesUsecase';
   import type { GridViewSettings } from './setting';
   import Card from './view/Card.svelte';
   import { openCardMenu, openSortMenu } from './view/ContextMenu.svelte';
-  import Icon from './view/Icon.svelte';
   import SearchBar from './view/SearchBar.svelte';
+  import SortMenu from './view/SortMenu.svelte';
 
   export let getPagesUsecase: GetPagesUsecase;
   export let obsidianAdapter: ObsidianAdapter;
@@ -29,8 +28,8 @@
   let gridWidth: number;
   let cardWidth: number;
   let searchRef: HTMLElement;
-  $: pinStarred = settings.pinStarred;
-  $: sort = settings.sort;
+  $: pinStarred = settings.gridView.pinStarred;
+  $: sort = settings.gridView.sort;
   let search = '';
 
   let infiniteScrollTarget: HTMLElement;
@@ -91,12 +90,12 @@
       event,
       pinStarred,
       onSelect: async (newKind) => {
-        settings.sort = newKind;
+        settings.gridView.sort = newKind;
         await saveSettings();
         await loadPages({ reset: true });
       },
       onPinStarredChange: async (value) => {
-        settings.pinStarred = value;
+        settings.gridView.pinStarred = value;
         await saveSettings();
         await loadPages({ reloadAll: true });
       },
@@ -153,15 +152,7 @@
 <!-- infinite scroll grid -->
 <div class="max-h-full overflow-x-scroll" bind:this={infiniteScrollTarget}>
   <!-- sort -->
-  <div class="flex justify-center">
-    <div class="flex w-[90%] pb-2">
-      <div class="grow" />
-      <button class="flex-none rounded p-2" on:click={onSortClick}
-        >{getSortTitle(sort)}
-        <Icon iconId="down-chevron-glyph" />
-      </button>
-    </div>
-  </div>
+  <SortMenu {sort} {onSortClick} />
   <!-- card grid -->
   <div class="flex justify-center">
     <div class="flex max-h-full w-[90%] flex-wrap gap-[16px] overflow-x-scroll pl-[16px]" bind:clientWidth={gridWidth}>

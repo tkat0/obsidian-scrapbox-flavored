@@ -47,3 +47,4 @@ jobs:
           files: |
             packages/plugin/manifest.json
             packages/plugin/main.js
+            packages/plugin/styles.css

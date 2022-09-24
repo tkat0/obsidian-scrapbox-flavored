@@ -6,7 +6,7 @@
   export let icon: string | undefined = undefined;
   export let star = false;
   export let width: number;
-  export let onClick: () => void;
+  export let onClick: (() => void) | undefined = undefined;
 </script>
 
 <div

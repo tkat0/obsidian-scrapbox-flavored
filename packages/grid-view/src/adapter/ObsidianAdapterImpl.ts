@@ -21,6 +21,10 @@ export class ObsidianAdapterImpl implements ObsidianAdapter {
     this.starredPluginEvents = [];
   }
 
+  getActiveFile(): File {
+    return this.app.workspace.getActiveFile() as File;
+  }
+
   setIcon(parent: HTMLElement, iconId: string, size?: number | undefined): void {
     setIcon(parent, iconId, size);
   }
@@ -107,6 +111,11 @@ export class ObsidianAdapterImpl implements ObsidianAdapter {
     return this.app.workspace.getLeaf(true).openFile(file as TFile, { active: true });
   }
 
+  createFile(path: string): Promise<File> {
+    const file = this.app.vault.create(path, '');
+    return file as Promise<File>;
+  }
+
   cachedRead(file: File): Promise<string> {
     return this.app.vault.cachedRead(file as TFile);
   }
@@ -117,8 +126,21 @@ export class ObsidianAdapterImpl implements ObsidianAdapter {
 
   getMetadata(file: File): Metadata {
     const metadata = this.app.metadataCache.getFileCache(file as TFile);
+
+    const resolvedLinks: File[] = [];
+    const unresolvedLinks: string[] = [];
+    metadata?.links?.forEach(({ link }) => {
+      const f = this.app.metadataCache.getFirstLinkpathDest(link, file.path);
+      if (f) {
+        resolvedLinks.push(f);
+      } else {
+        unresolvedLinks.push(link);
+      }
+    });
+
     return {
-      links: metadata?.links?.length ?? 0,
+      resolvedLinks,
+      unresolvedLinks,
       tags: metadata?.tags?.map(({ tag }) => tag) ?? [],
     };
   }

@@ -1,0 +1,9 @@
+.markdown-source-view .cm-content {
+  /* Reduce bottom padding to place Related Pages */
+  padding-bottom: 64px !important;
+}
+
+/* Expand page width to show related pages */
+.markdown-source-view .cm-contentContainer {
+  max-width: 100% !important;
+}
