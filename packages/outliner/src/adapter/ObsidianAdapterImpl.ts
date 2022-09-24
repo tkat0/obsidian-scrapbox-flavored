@@ -70,6 +70,7 @@ export class ObsidianAdapterImpl implements ObsidianAdapter {
     return text;
   }
 
+  // TODO: if the range includes the end of line, it doesn't work
   move(a: LineRange, b: LineNo): void {
     const up = a.start > b;
     const { start, end } = a;
@@ -95,13 +96,13 @@ export class ObsidianAdapterImpl implements ObsidianAdapter {
       insert,
     });
 
-    const { offset } = this.getCursor();
-    const nextCursorLine = up ? b : a.start + (b - a.end);
     this.editor.dispatch({
       changes,
     });
 
     {
+      const { offset } = this.getCursor();
+      const nextCursorLine = up ? b : a.start + (b - a.end);
       const { from } = this.editor.state.doc.line(nextCursorLine);
       this.editor.dispatch({
         selection: {
