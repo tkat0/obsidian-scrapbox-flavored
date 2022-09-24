@@ -92,6 +92,20 @@ The hotkeys can not be changed now.
 
 ## How to use
 
+This plugin has not been released officially yet.
+
+### BRAT
+
+If you use BRAT (Beta Reviewers Auto-update Tester), you can try the plugin to specify `tkat0/obsidian-scrapbox-flavored`.
+
+See [TfTHacker/obsidian42-brat: BRAT - Beta Reviewer's Auto-update Tool for Obsidian. Part of the Obsidian42 family of plugins.](https://github.com/TfTHacker/obsidian42-brat) for details
+
+### Copy manually
+-   Download `main.js`, `manifest.json` and `styles.css` from [Releases](https://github.com/tkat0/obsidian-scrapbox-flavored/releases)
+-   Copy them to your vault `VaultFolder/.obsidian/plugins/obsidian-scrapbox-flavored`
+-   Enable this plugin in the Obsidian configuration.
+
+### Build manually
 -   Download this repository
 -   Run `pnpm install && pnpm run build`
 -   Copy over `./packages/plugin/{main.js, manifest.json}` to your vault `VaultFolder/.obsidian/plugins/obsidian-scrapbox-flavored`
