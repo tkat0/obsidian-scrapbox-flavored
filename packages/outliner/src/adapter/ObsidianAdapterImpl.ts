@@ -117,17 +117,22 @@ export class ObsidianAdapterImpl implements ObsidianAdapter {
 
     const change = direction == 'indent' ? 1 : -1;
     const { useTab, tabSize } = this.config;
-    const indentChar = useTab ? '\t' : ' '.repeat(tabSize);
 
     let offset: number | undefined = undefined;
     const changes: ChangeSpec[] = [];
     items.forEach((item) => {
       const { text: line, from, to } = this.editor.state.doc.line(item.lineNo);
       let text;
-      if (item.level + change < 0) {
+      // TODO: move to domain to write test
+      const nSpaces = item.level * 2 + (useTab ? 4 : tabSize) * change;
+      const nTabs = Math.trunc(nSpaces / 4);
+      if (nSpaces < 0 || (useTab && nTabs < 0)) {
         text = `${item.text}`;
       } else {
-        const space = indentChar.repeat(item.level + change);
+        let space = ' '.repeat(nSpaces);
+        if (useTab) {
+          space = '\t'.repeat(nTabs);
+        }
         text = `${space}${item.prefix} ${item.text}`;
       }
       if (offset == undefined) {
