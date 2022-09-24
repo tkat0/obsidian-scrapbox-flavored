@@ -47,23 +47,11 @@ export const getListInfo = (text: string): GetListInfoOutput => {
 };
 
 export const calcLevel = (items: ListItem[]) => {
-  let currentLevel = 0;
-  let indent = '';
-  // use first level1 indent as a unit
-  let unit: string | undefined = undefined;
   items.map((item) => {
-    if (item.indent.length == 0) {
-      currentLevel = 0;
-    } else if (item.indent.length > indent.length) {
-      currentLevel += 1;
-      if (currentLevel == 1) {
-        unit = item.indent;
-      }
-    } else if (item.indent.length < indent.length) {
-      currentLevel = Math.trunc(item.indent.length / unit.length);
-    }
-    indent = item.indent;
-    item.level = currentLevel;
+    // User can set indent as 2-8 spaces or tab
+    // Define level 1 as 2 spaces and tab as 4 spaces here
+    const indent = item.indent.replaceAll('\t', '    ');
+    item.level = Math.trunc(indent.length / 2);
     return item;
   });
 };

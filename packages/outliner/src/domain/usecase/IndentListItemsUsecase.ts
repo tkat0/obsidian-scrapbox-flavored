@@ -48,12 +48,14 @@ export class IndentListItemsUsecase {
       return { changedLineNo: [], isList: true };
     }
 
-    if (currentIndex > 0 && direction == 'indent') {
-      const prev = block.items[currentIndex - 1];
-      if (prev.level + 1 == current.level) {
-        return { changedLineNo: [], isList: true };
-      }
-    }
+    // NOTE: Don't restrict indent level between parent and child
+    //  since Obsidian can mix various indent characters
+    // if (currentIndex > 0 && direction == 'indent') {
+    //   const prev = block.items[currentIndex - 1];
+    //   if (prev.level + 1 == current.level) {
+    //     return { changedLineNo: [], isList: true };
+    //   }
+    // }
 
     const children = skipChildren == true ? [] : getChildren(block.items, currentIndex);
     const target = [current, ...children];

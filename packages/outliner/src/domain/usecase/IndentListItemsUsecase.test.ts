@@ -72,7 +72,7 @@ describe('IndentListItemsUsecase', () => {
     expect(changedLineNo).toEqual([2]);
   });
 
-  it(`should not indent deeper`, async () => {
+  it(`should indent deeper`, async () => {
     const page = ['- 0', '  - 1', '- 2'];
     const lineNo = 2;
 
@@ -80,7 +80,7 @@ describe('IndentListItemsUsecase', () => {
 
     const { changedLineNo } = indentListItemsUsecase.invoke({ direction: 'indent' });
 
-    expect(changedLineNo).toEqual([]);
+    expect(changedLineNo).toEqual([2]);
   });
 
   it(`should indent with children`, async () => {
