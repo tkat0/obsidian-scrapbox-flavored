@@ -12,6 +12,9 @@ export class IndentListItemsUsecase {
     }
 
     const { offset } = this.adapter.getCursor();
+
+    // TODO: if selecting multiple lines, ignore the command and delegate to default behavior
+
     const { lineNo, text } = this.adapter.readCurrentLine();
 
     if (condition == 'after-prefix' && !isCursorNextToPrefix(text, offset)) {
