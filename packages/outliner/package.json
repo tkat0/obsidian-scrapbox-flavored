@@ -22,7 +22,7 @@
     "esbuild": "0.13.12",
     "obsidian": "0.16.0",
     "tslib": "2.3.1",
-    "typescript": "4.4.4",
+    "typescript": "4.8.3",
     "vite": "^3.1.0",
     "vitest": "^0.23.2",
     "vitest-mock-extended": "^0.1.15"
