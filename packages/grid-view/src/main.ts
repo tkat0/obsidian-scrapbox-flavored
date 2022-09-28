@@ -83,6 +83,7 @@ export default class GridViewPlugin extends Plugin {
   }
 
   async activeView() {
+    // TODO: open the view in the new leaf. If it exsits, it shouldn't create new leaf, but just active the leaf.
     this.app.workspace.detachLeavesOfType(GridView.id);
 
     await this.app.workspace.getLeaf(false).setViewState({
