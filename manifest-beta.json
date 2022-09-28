@@ -1,7 +1,7 @@
 {
     "id": "obsidian-scrapbox-flavored",
     "name": "Scrapbox-flavored",
-    "version": "0.3.1",
+    "version": "0.4.0",
     "minAppVersion": "0.15.9",
     "description": "Scrapbox-flavored plugin for Obsidian",
     "author": "tkat0",
