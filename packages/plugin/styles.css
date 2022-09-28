@@ -1,3 +1,5 @@
+/* Add prefix 'sbf-' for the plugin specific identifier to avoid conflicts */
+
 .markdown-source-view .cm-content {
   /* Reduce bottom padding to place Related Pages */
   padding-bottom: 64px !important;
@@ -6,4 +8,26 @@
 /* Expand page width to show related pages */
 .markdown-source-view .cm-contentContainer {
   max-width: 100% !important;
+}
+
+/* Same as HyperMD-quate */
+.sbf-quote-head {
+  border: 0 solid var(--background-modifier-border);
+  border-left-width: 5px;
+  background-color: var(--background-secondary);
+}
+
+.sbf-quote-tail {
+  border: 0 solid var(--background-modifier-border);
+  background-color: var(--background-secondary);
+}
+
+.sbf-helpfeel-head {
+  color: #f17c00;
+  background-color: #fbebdd;
+}
+
+.sbf-helpfeel-tail {
+  color: #cc5020;
+  background-color: #fbebdd;
 }

@@ -31,6 +31,39 @@ Show cards related to the current page at the bottom of the page
 
 <img src="./packages/grid-view/docs/related-pages.png" width="600px" />
 
+# [Experimental] Styles
+
+Provide Scrapbox flavored syntax.
+
+This feature is disabled in default. Enable it in the setting.
+
+<table>
+<thead>
+<tr>
+<th>Style</th>
+<th>Screenshot</th>
+</tr>
+</thead>
+<tr>
+
+<tr>
+<td>
+quote in list
+</td>
+<td>
+<img src="./packages/styles/docs/quote-in-list.jpeg" width="300px" />
+</td>
+</tr>
+
+<tr>
+<td>
+<a href="https://scrapbox.io/help-jp/Helpfeel%E8%A8%98%E6%B3%95">helpfeel</a> in list
+</td>
+<td>
+<img src="./packages/styles/docs/helpfeel.jpeg" width="300px" />
+</td>
+</tr>
+
 ### [Experimental] Outliner
 
 Provide an effective list operations

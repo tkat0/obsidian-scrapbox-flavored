@@ -1,52 +1,81 @@
 import { syntaxTree } from '@codemirror/language';
 import { Extension, RangeSetBuilder, StateField, Transaction } from '@codemirror/state';
-import { Decoration, DecorationSet, EditorView, WidgetType } from '@codemirror/view';
+import { Decoration, DecorationSet, EditorView } from '@codemirror/view';
 
-export class QuateWidget extends WidgetType {
-  constructor(private text: string) {
-    super();
-  }
+/**
+ * matches line as follows.
+ *  " - ", " * ", " 1. "
+ */
+export const REGEX_MARKDOWN_LIST = /(?<indent>[\s]*)([-*]|\d+\.)\s/;
 
-  toDOM(view: EditorView): HTMLElement {
-    const el = document.createElement('span');
-
-    el.addClass('HyperMD-quote');
-    el.innerText = this.text;
-
-    return el;
-  }
-}
-
-export const scrapboxStyleField = StateField.define<DecorationSet>({
+export const QuoteInListField = StateField.define<DecorationSet>({
   create(state): DecorationSet {
     return Decoration.none;
   },
   update(oldState: DecorationSet, transaction: Transaction): DecorationSet {
     const builder = new RangeSetBuilder<Decoration>();
 
-    syntaxTree(transaction.state);
-
+    // apply quote style to <div> block for a list item
+    // e.g. "- >abc"
     syntaxTree(transaction.state).iterate({
       enter(node) {
-        if (!node.type.name.startsWith('list')) {
+        if (!node.type.name.startsWith('HyperMD-list-line')) {
           return;
         }
 
-        // apply style to quate in list (e.g. "- >abc")
-        // TODO: apply syntax of `code`, **emphasis**, etc in list
         const endOfLine = transaction.state.doc.lineAt(node.from).to;
-        const text = transaction.state.doc.sliceString(node.from, endOfLine);
-        if (!text.startsWith('>')) {
+        const line = transaction.state.doc.sliceString(node.from, endOfLine);
+        const text = line.replace(REGEX_MARKDOWN_LIST, '');
+        if (text.startsWith('>')) {
+          // "    - > abc `abc`"
+          //        ^ add "sbf-quote-head cm-transparent"
+          //
+          // "    - > abc `abc`"
+          //         ^^^^^^^^^^ add "sbf-quote-tail cm-quote"
+          const offset = line.length - text.length;
+          builder.add(
+            node.from + offset,
+            node.from + offset + 1,
+            Decoration.mark({ class: 'sbf-quote-head cm-transparent' }),
+          );
+          builder.add(node.from + offset + 1, node.to, Decoration.mark({ class: 'sbf-quote-tail' }));
+          // NOTE: Decoration.line highlights all of the line.
+          // builder.add(node.from, node.from, Decoration.line({ class: 'HyperMD-quote' }));
           return;
         }
+      },
+    });
 
-        builder.add(
-          node.from,
-          node.to + 5,
-          Decoration.replace({
-            widget: new QuateWidget(text),
-          }),
-        );
+    return builder.finish();
+  },
+  provide(field: StateField<DecorationSet>): Extension {
+    return EditorView.decorations.from(field);
+  },
+});
+
+export const HelpfeelField = StateField.define<DecorationSet>({
+  create(state): DecorationSet {
+    return Decoration.none;
+  },
+  update(oldState: DecorationSet, transaction: Transaction): DecorationSet {
+    const builder = new RangeSetBuilder<Decoration>();
+
+    // apply helpfeel style to each line that starts with `?`
+    // e.g. "- ? abc"
+    syntaxTree(transaction.state).iterate({
+      // TODO: doesn't support non-list like "? abc" yet
+      enter(node) {
+        if (node.type.name.startsWith('HyperMD-list-line')) {
+          const endOfLine = transaction.state.doc.lineAt(node.from).to;
+          const line = transaction.state.doc.sliceString(node.from, endOfLine);
+          const text = line.replace(REGEX_MARKDOWN_LIST, '');
+          if (text.startsWith('? ')) {
+            const offset = line.length - text.length;
+            builder.add(node.from + offset, node.from + offset + 1, Decoration.mark({ class: 'sbf-helpfeel-head' }));
+            builder.add(node.from + offset, node.to, Decoration.mark({ class: 'sbf-helpfeel-tail' }));
+            return;
+          }
+        }
       },
     });
 
