@@ -41,6 +41,7 @@ export default class OutlinerPlugin extends Plugin {
     this.registerEditorExtension(
       Prec.highest(
         keymap.of([
+          // TODO: Ctrl-a/e conflicts default keymap on Windows
           {
             key: 'Ctrl-a',
             run: (target) => {
@@ -88,19 +89,31 @@ export default class OutlinerPlugin extends Plugin {
           {
             key: 'Tab',
             run: (target) => {
-              return indent(target, 'indent', undefined, true).isList;
+              // allow to indent only when a line is empty
+              const { changedLineNo } = indent(target, 'indent', 'begin-of-line', true);
+              if (changedLineNo.length > 0) {
+                return true;
+              } else {
+                return false; // allow default behavior
+              }
             },
           },
           {
             key: 'Shift-Tab',
             run: (target) => {
-              return indent(target, 'outdent', undefined, true).isList;
+              // allow to outdent only when the cursor is next to a list prefix
+              const { changedLineNo } = indent(target, 'outdent', 'after-prefix', true);
+              if (changedLineNo.length > 0) {
+                return true;
+              } else {
+                return false; // allow default behavior
+              }
             },
           },
           {
             key: 'Space',
             run: (target) => {
-              // allow to indent by space key only when a line is empty
+              // allow to indent only when a line is empty
               const { changedLineNo } = indent(target, 'indent', 'begin-of-line', true);
               if (changedLineNo.length > 0) {
                 return true;
@@ -112,7 +125,7 @@ export default class OutlinerPlugin extends Plugin {
           {
             key: 'Backspace',
             run: (target) => {
-              // allow to outdent by backspace key only when the cursor is next to a list prefix
+              // allow to outdent only when the cursor is next to a list prefix
               const { changedLineNo } = indent(target, 'outdent', 'after-prefix', true);
               if (changedLineNo.length > 0) {
                 return true;
