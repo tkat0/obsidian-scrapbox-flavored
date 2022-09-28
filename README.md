@@ -31,7 +31,7 @@ Show cards related to the current page at the bottom of the page
 
 <img src="./packages/grid-view/docs/related-pages.png" width="600px" />
 
-# [Experimental] Styles
+### [Experimental] Styles
 
 Provide Scrapbox flavored syntax.
 
