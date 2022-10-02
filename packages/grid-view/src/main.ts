@@ -83,15 +83,18 @@ export default class GridViewPlugin extends Plugin {
   }
 
   async activeView() {
-    // TODO: open the view in the new leaf. If it exsits, it shouldn't create new leaf, but just active the leaf.
-    this.app.workspace.detachLeavesOfType(GridView.id);
-
-    await this.app.workspace.getLeaf(false).setViewState({
-      type: GridView.id,
-      active: true,
-    });
-
-    this.app.workspace.revealLeaf(this.app.workspace.getLeavesOfType(GridView.id)[0]);
+    // open the view in the new leaf. If it exsits, it shouldn't create new leaf, but just active the leaf.
+    const leaves = this.app.workspace.getLeavesOfType(GridView.id);
+    if (leaves.length == 1) {
+      // set active
+      this.app.workspace.setActiveLeaf(leaves[0]);
+    } else {
+      // create new leaf
+      await this.app.workspace.getLeaf(false).setViewState({
+        type: GridView.id,
+        active: true,
+      });
+    }
   }
 }
 
