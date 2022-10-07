@@ -15,4 +15,5 @@ export interface GetPagesUsecaseInput {
 export interface GetPagesUsecaseOutput {
   cards: ICard[];
   hasMore: boolean;
+  total: number;
 }

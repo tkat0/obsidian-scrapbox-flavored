@@ -62,6 +62,7 @@ export class GetPagesUsecaseImpl implements GetPagesUsecase {
     return {
       cards,
       hasMore: size * (page + 1) < iter.length,
+      total: iter.length,
     };
   }
 

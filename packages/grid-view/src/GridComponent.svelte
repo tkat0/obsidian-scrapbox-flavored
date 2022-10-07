@@ -13,6 +13,7 @@
   import { openCardMenu, openSortMenu } from './view/ContextMenu.svelte';
   import SearchBar from './view/SearchBar.svelte';
   import SortMenu from './view/SortMenu.svelte';
+  import StatusBar from './view/StatusBar.svelte';
 
   export let getPagesUsecase: GetPagesUsecase;
   export let obsidianAdapter: ObsidianAdapter;
@@ -23,6 +24,7 @@
   let page = 0;
   let size = 100;
   let hasMore = true;
+  let total: number = 0;
 
   let cardRef: HTMLElement[] = [];
   let gridWidth: number;
@@ -117,7 +119,11 @@
       page = 0;
     }
     try {
-      const { cards: newCards, hasMore: hasMore_ } = await getPagesUsecase.invoke({
+      const {
+        cards: newCards,
+        hasMore: hasMore_,
+        total: total_,
+      } = await getPagesUsecase.invoke({
         page,
         size: option?.reloadAll ? cards.length : size,
         sort,
@@ -125,6 +131,7 @@
         pinStarred,
       });
       hasMore = hasMore_;
+      total = total_;
       if (option?.reset || option?.reloadAll) {
         cards = newCards;
       } else {
@@ -164,6 +171,7 @@
       {/each}
     </div>
   </div>
+  <StatusBar {total} />
   <InfiniteScroll threshold={100} {hasMore} on:loadMore={() => loadMore()} />
 </div>
 
