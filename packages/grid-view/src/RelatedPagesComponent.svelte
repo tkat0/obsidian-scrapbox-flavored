@@ -76,7 +76,7 @@
   }
 </script>
 
-<div class="w-full pb-16">
+<div class="w-full py-8">
   {#if hasCard}
     <SortMenu sort={settings.relatedPages.sort} {onSortClick} />
   {/if}

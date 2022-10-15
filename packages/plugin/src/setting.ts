@@ -35,6 +35,18 @@ export class ScrapboxFlavoredPluginSettingTab extends PluginSettingTab {
     containerEl.empty();
     containerEl.createEl('h2', { text: 'Scrapbox-flavored Settings' });
 
+    new Setting(containerEl).setName('Grid View').setHeading();
+
+    new Setting(containerEl)
+      .setName('enable Related Pages')
+      .setDesc('enable scrapbox flavored related pages. Please restart Obsidian after the change.')
+      .addToggle((toggle) => {
+        toggle.setValue(this.plugin.settings.gridView.relatedPages.enable).onChange(async (value) => {
+          this.plugin.settings.gridView.relatedPages.enable = value;
+          await this.plugin.saveSettings();
+        });
+      });
+
     new Setting(containerEl).setName('Outliner').setHeading();
 
     new Setting(containerEl)

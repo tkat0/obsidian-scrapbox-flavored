@@ -3,7 +3,7 @@ import type { PluginManifest } from 'obsidian';
 
 import { GridView } from './GridView';
 import { RelatedPages } from './RelatedPages';
-import type { GridViewSettings } from './setting';
+import { type GridViewSettings, migration } from './setting';
 import { DEFAULT_SETTINGS } from './setting';
 
 export { DEFAULT_SETTINGS as GRID_VIEW_DEFAULT_SETTINGS };
@@ -20,6 +20,7 @@ export default class GridViewPlugin extends Plugin {
   }
 
   async onload() {
+    this.settings = migration(this.settings);
     this.registerView(GridView.id, (leaf) => new GridView(leaf, this.settings, this.saveSettings));
 
     this.addRibbonIcon('grid', 'Scrapbox-flavored Grid View', (_evt: MouseEvent) => {
@@ -35,7 +36,17 @@ export default class GridViewPlugin extends Plugin {
       hotkeys: [{ modifiers: ['Meta', 'Shift'], key: 'g' }],
     });
 
-    // add/delete RelatedPages component to MarkdownView
+    if (this.settings.relatedPages.enable) {
+      this.registerRelatedPage();
+    }
+  }
+
+  onunload() {
+    this.app.workspace.detachLeavesOfType(GridView.id);
+  }
+
+  // add/delete RelatedPages component to MarkdownView
+  registerRelatedPage() {
     this.registerEvent(
       this.app.workspace.on('active-leaf-change', (_leaf) => {
         const newLeaves: Record<string, HasComponent> = {};
@@ -76,10 +87,6 @@ export default class GridViewPlugin extends Plugin {
         this.leafs = newLeaves;
       }),
     );
-  }
-
-  onunload() {
-    this.app.workspace.detachLeavesOfType(GridView.id);
   }
 
   async activeView() {

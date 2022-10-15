@@ -24,10 +24,15 @@ export class RelatedPages {
     const contentEl = this.view.containerEl.querySelector('.view-content .cm-editor .cm-contentContainer');
     if (!contentEl) return;
 
+    const target = document.createElement('div');
+    target.setAttribute('class', 'obsidian-scrapbox-flavored related-pages');
+
+    contentEl.after(target);
+
     const obsidianAdapter = new ObsidianAdapterImpl(this.app);
     const wasmAdapter = await WasmAdapterImpl.init();
     this.component = new RelatedPagesComponent({
-      target: contentEl,
+      target,
       props: {
         getRelatedPagesUsecase: await GetRelatedPagesUsecaseImpl.init(obsidianAdapter, wasmAdapter),
         app: this.app,
